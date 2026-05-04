@@ -27,9 +27,7 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 			{
 				allPostsByDate.map((p) => (
-					<li>
-						<PostCard post={p} />
-					</li>
+					<PostCard post={p} />
 				))
 			}
 		</div>

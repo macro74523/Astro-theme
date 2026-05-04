@@ -1,8 +1,6 @@
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
-import FormattedDate from "@/components/FormattedDate.astro";
-import { siteConfig } from "@/site.config";
 
 type Props = {
 	post: CollectionEntry<"post">;
@@ -27,26 +25,24 @@ const { post } = Astro.props;
 	)}
 
 	<div class="flex flex-1 flex-col p-4">
-		<div class="mb-2 flex items-center gap-2 text-sm text-accent/60 dark:text-accent-2/60">
-			<FormattedDate date={post.data.publishDate} />
+		<div class="mb-2 flex items-center gap-2">
+			<h2 class="text-lg font-semibold leading-tight text-accent-2 transition-colors group-hover:text-accent dark:text-accent-2 dark:group-hover:text-accent-2">
+				{post.data.title}
+			</h2>
 			{post.data.tags?.length > 0 && (
-				<span class="rounded-full bg-accent/10 px-2 py-0.5 text-xs text-accent dark:bg-accent-2/10 dark:text-accent-2">
+				<span class="shrink-0 rounded-full bg-accent/10 px-2 py-0.5 text-xs text-accent dark:bg-accent-2/10 dark:text-accent-2">
 					{post.data.tags[0]}
 				</span>
 			)}
 		</div>
 
-		<h2 class="mb-2 text-lg font-semibold leading-tight text-accent-2 transition-colors group-hover:text-accent dark:text-accent-2 dark:group-hover:text-accent-2">
-			{post.data.title}
-		</h2>
-
-		<p class="line-clamp-2 flex-1 text-sm text-accent/70 dark:text-accent-2/70">
+		<p class="line-clamp-2 flex-1 text-sm text-gray-700 dark:text-gray-300">
 			{post.data.description}
 		</p>
 
-		<div class="mt-4 flex items-center justify-between">
-			<span class="text-sm text-accent/50 transition-colors group-hover:text-accent dark:text-accent-2/50">
-				阅读更多 →
+		<div class="mt-4 flex items-center justify-end">
+			<span class="text-lg text-accent/50 transition-all group-hover:text-accent group-hover:translate-x-1 dark:text-accent-2/50">
+				→
 			</span>
 		</div>
 	</div>
