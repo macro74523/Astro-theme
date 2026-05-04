@@ -2,32 +2,29 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import PostCard from "@/components/blog/PostCard.astro";
 import Note from "@/components/note/Note.astro";
-import { getAllPosts } from "@/data/post";
+import { getAllPostsWithBilibiliCovers } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import { collectionDateSort } from "@/utils/date";
 export const prerender = true;
 
-// Posts
 const MAX_POSTS = 6;
-const allPosts = await getAllPosts();
-const allPostsByDate = allPosts
-	.sort(collectionDateSort)
-	.slice(0, MAX_POSTS) as CollectionEntry<"post">[];
+const allPostsWithCovers = await getAllPostsWithBilibiliCovers();
+const latestPosts = allPostsWithCovers
+	.sort((a, b) => collectionDateSort(a.post, b.post))
+	.slice(0, MAX_POSTS);
 
-// Notes
 const MAX_NOTES = 0;
 const allNotes = await getCollection("note");
 const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 ---
 
-<!-- 修改：主页 -->
 <PageLayout meta={{ title: "主页" }}>
 	<section aria-label="Blog post list" class="mb-12">
 		<h2 class="title mb-8 text-xl text-accent"><a href="/posts/">最近文章</a></h2>
 		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 			{
-				allPostsByDate.map((p) => (
-					<PostCard post={p} />
+				latestPosts.map((item) => (
+					<PostCard post={item.post} coverUrl={item.bilibiliCover} />
 				))
 			}
 		</div>
