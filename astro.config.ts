@@ -29,7 +29,9 @@ import decapCmsOauth from "astro-decap-cms-oauth";
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  adapter: vercel(),
+  adapter: vercel({
+    runtime: 'nodejs20.x',
+  }),
     image: {
         domains: ["webmention.io"],
     },
