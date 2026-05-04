@@ -4,17 +4,26 @@ interface Props {
 }
 
 const { path } = Astro.props;
+const serverURL = 'https://waline77.macro.wang';
 ---
 
 <div id="waline" class="mt-12"></div>
 
-<script define:vars={{ path }}>
-  import { init } from '@waline/client';
-
-  init({
-    el: '#waline',
-    path: path,
-    serverURL: 'https://waline77.macro.wang',
-    lang: 'zh-CN',
-  });
+<script is:inline define:vars={{ path, serverURL }}>
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/@waline/client@3/dist/waline.js';
+    script.onload = function() {
+      Waline.init({
+        el: '#waline',
+        path: path,
+        serverURL: serverURL,
+        lang: 'zh-CN',
+      });
+    };
+    script.onerror = function() {
+      console.error('Failed to load Waline script');
+    };
+    document.head.appendChild(script);
+  })();
 </script>
