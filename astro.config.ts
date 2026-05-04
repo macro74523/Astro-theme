@@ -31,6 +31,9 @@ export default defineConfig({
   output: 'server',
   adapter: vercel({
     runtime: 'nodejs20.x',
+    webAnalytics: {
+      enabled: true,
+    },
   }),
     image: {
         domains: ["webmention.io"],

@@ -4,7 +4,6 @@ import { type CollectionEntry, render } from "astro:content";
 import Masthead from "@/components/blog/Masthead.astro";
 import TOC from "@/components/blog/TOC.astro";
 import WebMentions from "@/components/blog/webmentions/index.astro";
-import Waline from "@/components/blog/Waline.astro";
 
 import BaseLayout from "./Base.astro";
 
@@ -37,7 +36,6 @@ const { headings } = await render(post);
 			>
 				<slot />
 				<WebMentions />
-				<Waline path={Astro.url.pathname} />
 			</div>
 		</article>
 	</div>
