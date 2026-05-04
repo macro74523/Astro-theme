@@ -4,11 +4,11 @@ import type { CollectionEntry } from "astro:content";
 
 type Props = {
 	post: CollectionEntry<"post">;
-	coverUrl?: string;
 };
 
-const { post, coverUrl } = Astro.props;
-const displayCover = post.data.coverImage?.src ?? coverUrl;
+const { post } = Astro.props;
+
+const isBV = (str?: string) => str?.startsWith("BV");
 ---
 
 <article class="group relative flex flex-col overflow-hidden rounded-lg border border-accent/20 bg-bgColor transition-all hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 dark:border-accent-2/20 dark:bg-accent-2/5 dark:hover:border-accent-2/40 dark:hover:shadow-accent-2/5">
@@ -16,21 +16,25 @@ const displayCover = post.data.coverImage?.src ?? coverUrl;
 		<span class="sr-only">阅读 {post.data.title}</span>
 	</a>
 
-	{displayCover && (
+	{post.data.coverImage && !isBV(post.data.ogImage) && (
 		<div class="aspect-[16/9] overflow-hidden">
-			{displayCover.startsWith("http") ? (
-				<img
-					alt={post.data.title}
-					class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-					src={displayCover}
-				/>
-			) : (
-				<Image
-					alt={post.data.coverImage?.alt ?? post.data.title}
-					class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-					src={displayCover}
-				/>
-			)}
+			<Image
+				alt={post.data.coverImage.alt}
+				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+				src={post.data.coverImage.src}
+			/>
+		</div>
+	)}
+
+	{isBV(post.data.ogImage) && (
+		<div class="aspect-[16/9] overflow-hidden">
+			<img
+				alt={post.data.title}
+				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+				data-bv={post.data.ogImage}
+				src=""
+				onerror="this.src='/social-card.avif'"
+			/>
 		</div>
 	)}
 
@@ -57,3 +61,25 @@ const displayCover = post.data.coverImage?.src ?? coverUrl;
 		</div>
 	</div>
 </article>
+
+<script is:inline>
+	document.addEventListener("DOMContentLoaded", () => {
+		document.querySelectorAll("img[data-bv]").forEach((img) => {
+			const bvid = img.getAttribute("data-bv");
+			if (!bvid) return;
+
+			fetch(`https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`)
+				.then((res) => res.json())
+				.then((data) => {
+					if (data.code === 0 && data.data?.pic) {
+						img.src = data.data.pic;
+					} else {
+						img.src = "/social-card.avif";
+					}
+				})
+				.catch(() => {
+					img.src = "/social-card.avif";
+				});
+		});
+	});
+</script>

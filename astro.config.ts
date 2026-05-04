@@ -36,7 +36,7 @@ export default defineConfig({
     },
   }),
     image: {
-        domains: ["webmention.io", "i0.hdslb.com", "i1.hdslb.com", "i2.hdslb.com", "i3.hdslb.com", "i.hdslb.com"],
+        domains: ["webmention.io"],
     },
     integrations: [expressiveCode(expressiveCodeOptions), icon({
   iconDir: "public/icons", // 修改：指定自定义图标目录 name = svg文件名
