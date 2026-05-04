@@ -1,0 +1,20 @@
+---
+interface Props {
+  path: string;
+}
+
+const { path } = Astro.props;
+---
+
+<div id="waline" class="mt-12"></div>
+
+<script define:vars={{ path }}>
+  import { init } from '@waline/client';
+
+  init({
+    el: '#waline',
+    path: path,
+    serverURL: 'https://waline77.macro.wang',
+    lang: 'zh-CN',
+  });
+</script>
