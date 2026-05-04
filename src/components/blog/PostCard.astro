@@ -72,13 +72,9 @@ const isBV = (str?: string) => str?.startsWith("BV");
 				.then((data) => {
 					if (data.code === 0 && data.data?.pic) {
 						img.src = data.data.pic;
-					} else {
-						img.src = "/social-card.avif";
 					}
 				})
-				.catch(() => {
-					img.src = "/social-card.avif";
-				});
+				.catch(() => {});
 		});
 	});
 </script>
