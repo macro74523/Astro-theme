@@ -32,8 +32,7 @@ const isBV = (str?: string) => str?.startsWith("BV");
 				alt={post.data.title}
 				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 				data-bv={post.data.ogImage}
-				src="/social-card.avif"
-				loading="lazy"
+				src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 			/>
 		</div>
 	)}
@@ -68,30 +67,17 @@ const isBV = (str?: string) => str?.startsWith("BV");
 			const bvid = img.getAttribute("data-bv");
 			if (!bvid) return;
 
-			// 方案1: 使用 B站 API (可能跨域)
 			fetch(`https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`)
 				.then((res) => res.json())
 				.then((data) => {
 					if (data.code === 0 && data.data?.pic) {
 						img.src = data.data.pic;
 					} else {
-						console.warn("B站API返回错误:", data, "BV号:", bvid);
+						img.src = "/social-card.avif";
 					}
 				})
-				.catch((err) => {
-					console.error("获取B站封面失败:", err, "尝试备用方案...");
-					// 方案2: 如果失败，尝试使用第三方代理
-					fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`)}`)
-						.then((res) => res.json())
-						.then((result) => {
-							const data = JSON.parse(result.contents);
-							if (data.code === 0 && data.data?.pic) {
-								img.src = data.data.pic;
-							}
-						})
-						.catch(() => {
-							console.error("所有方案都失败了，使用默认封面");
-						});
+				.catch(() => {
+					img.src = "/social-card.avif";
 				});
 		});
 	});
