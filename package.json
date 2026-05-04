@@ -1,9 +1,6 @@
 {
 	"name": "",
 	"version": "5.0.0",
-	"engines": {
-		"node": ">=20.0.0"
-	},
 	"scripts": {
 		"dev": "astro dev",
 		"start": "astro dev",
