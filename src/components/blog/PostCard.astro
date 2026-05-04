@@ -62,19 +62,28 @@ const isBV = (str?: string) => str?.startsWith("BV");
 </article>
 
 <script is:inline>
-	document.addEventListener("DOMContentLoaded", () => {
-		document.querySelectorAll("img[data-bv]").forEach((img) => {
-			const bvid = img.getAttribute("data-bv");
-			if (!bvid) return;
+document.addEventListener("DOMContentLoaded", () => {
+	document.querySelectorAll("img[data-bv]").forEach((img) => {
+		const bvid = img.getAttribute("data-bv");
+		if (!bvid) return;
 
-			fetch(`https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`)
-				.then((res) => res.json())
-				.then((data) => {
-					if (data.code === 0 && data.data?.pic) {
-						img.src = data.data.pic;
-					}
-				})
-				.catch(() => {});
-		});
+		img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+		const apiUrl = `https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`;
+
+		fetch(apiUrl)
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.code === 0 && data.data?.pic) {
+					img.src = data.data.pic;
+				} else {
+					img.src = "";
+				}
+			})
+			.catch((err) => {
+				console.error("获取B站封面失败:", err);
+				img.src = "";
+			});
 	});
+});
 </script>
