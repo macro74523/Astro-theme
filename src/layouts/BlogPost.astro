@@ -30,11 +30,17 @@ const { headings } = await render(post);
 		{!!headings.length && <TOC headings={headings} />}
 		<article class="flex-grow break-words" data-pagefind-body>
 			<div id="blog-hero"><Masthead content={post} /></div>
-			<!-- 修改：博文宽度 -->
 			<div
 				class="prose prose-sm prose-cactus mt-12 max-w-2xl prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none"
 			>
 				<slot />
+				<div class="mt-8 flex justify-center">
+					<img
+						alt="logo"
+						class="h-12 w-auto opacity-80"
+						src="https://img.cdn1.vip/i/69f9573b5292f_1777948475.webp"
+					/>
+				</div>
 				<WebMentions />
 			</div>
 		</article>
@@ -65,7 +71,6 @@ const { headings } = await render(post);
 
 	function callback(entries: IntersectionObserverEntry[]) {
 		entries.forEach((entry) => {
-			// only show the scroll to top button when the heading is out of view
 			scrollBtn.dataset.show = (!entry.isIntersecting).toString();
 		});
 	}
