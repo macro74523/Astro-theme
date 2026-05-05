@@ -15,6 +15,7 @@ const hasExternalImage = (str?: string) => {
 
 const coverSrc = post.data.coverImage?.src;
 const ogImage = post.data.ogImage;
+const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 ---
 
 <article
@@ -24,20 +25,22 @@ const ogImage = post.data.ogImage;
 		<span class="sr-only">阅读 {post.data.title}</span>
 	</a>
 
-	<div class="card-cover">
-		{hasExternalImage(ogImage) && <img alt={post.data.title} class="cover-img" src={ogImage} />}
+	{
+		hasCover && (
+			<div class="card-cover">
+				{hasExternalImage(ogImage) && <img alt={post.data.title} class="cover-img" src={ogImage} />}
 
-		{
-			coverSrc && !hasExternalImage(ogImage) && (
-				<Image alt={post.data.coverImage.alt} class="cover-img" src={coverSrc} />
-			)
-		}
-	</div>
+				{coverSrc && !hasExternalImage(ogImage) && (
+					<Image alt={post.data.coverImage.alt} class="cover-img" src={coverSrc} />
+				)}
+			</div>
+		)
+	}
 
 	<div class="flex flex-1 flex-col p-4">
-		<div class="mb-2 flex items-center gap-2">
+		<div class="flex flex-wrap items-center gap-2">
 			<h2
-				class="text-lg font-semibold leading-tight text-accent-2 transition-colors group-hover:text-accent dark:text-accent-2 dark:group-hover:text-accent-2"
+				class="text-base font-semibold leading-tight text-accent-2 transition-colors group-hover:text-accent dark:text-accent-2 dark:group-hover:text-accent-2"
 			>
 				{post.data.title}
 			</h2>
@@ -50,23 +53,19 @@ const ogImage = post.data.ogImage;
 			}
 		</div>
 
-		<p class="line-clamp-2 flex-1 text-sm text-gray-700 dark:text-gray-300">
-			{post.data.description}
-		</p>
-
-		<div class="mt-4 flex items-center justify-end">
-			<span
-				class="text-lg text-accent/50 transition-all group-hover:translate-x-1 group-hover:text-accent dark:text-accent-2/50"
-			>
-				→
-			</span>
-		</div>
+		{
+			!hasCover && (
+				<p class="mt-2 line-clamp-2 flex-1 text-sm text-gray-700 dark:text-gray-300">
+					{post.data.description}
+				</p>
+			)
+		}
 	</div>
 </article>
 
 <style>
 	.card-cover {
-		aspect-ratio: 3 / 4;
+		aspect-ratio: 4 / 3;
 		overflow: hidden;
 		position: relative;
 	}

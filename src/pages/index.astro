@@ -224,7 +224,13 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 	.posts-grid {
 		display: grid;
 		gap: 1.5rem;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media (min-width: 768px) {
+		.posts-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 
 	.notes-section {
