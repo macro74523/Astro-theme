@@ -5,7 +5,6 @@ import Note from "@/components/note/Note.astro";
 import { getAllPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import { collectionDateSort } from "@/utils/date";
-import { siteConfig } from "@/site.config";
 export const prerender = true;
 
 const MAX_POSTS = 6;
@@ -20,31 +19,6 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 ---
 
 <PageLayout meta={{ title: "主页" }}>
-	<section class="hero">
-		<div class="hero-content">
-			<h1 class="hero-title">
-				欢迎来到 <span class="highlight">{siteConfig.title}</span>
-			</h1>
-			<p class="hero-desc">{siteConfig.description}</p>
-			<div class="hero-stats">
-				<div class="stat">
-					<span class="stat-num">{allPosts.length}</span>
-					<span class="stat-label">篇文章</span>
-				</div>
-				<div class="stat-divider"></div>
-				<div class="stat">
-					<span class="stat-num">{allNotes.length}</span>
-					<span class="stat-label">条笔记</span>
-				</div>
-			</div>
-		</div>
-		<div class="hero-decoration">
-			<div class="deco-circle"></div>
-			<div class="deco-circle"></div>
-			<div class="deco-circle"></div>
-		</div>
-	</section>
-
 	<section aria-label="Blog post list" class="posts-section">
 		<div class="section-header">
 			<h2 class="section-title">
@@ -90,99 +64,6 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 </PageLayout>
 
 <style>
-	.hero {
-		position: relative;
-		padding: 3rem 0 4rem;
-		overflow: hidden;
-	}
-
-	.hero-content {
-		position: relative;
-		z-index: 1;
-	}
-
-	.hero-title {
-		font-size: clamp(1.75rem, 5vw, 2.5rem);
-		font-weight: 700;
-		margin: 0 0 1rem;
-		color: var(--accent-2-color);
-	}
-
-	.highlight {
-		color: var(--accent-color);
-	}
-
-	.hero-desc {
-		font-size: 1rem;
-		color: #64748b;
-		margin: 0 0 2rem;
-		max-width: 400px;
-	}
-
-	.hero-stats {
-		display: flex;
-		align-items: center;
-		gap: 1.5rem;
-	}
-
-	.stat {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.stat-num {
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: var(--accent-color);
-	}
-
-	.stat-label {
-		font-size: 0.75rem;
-		color: #94a3b8;
-	}
-
-	.stat-divider {
-		width: 1px;
-		height: 2rem;
-		background: #e2e8f0;
-	}
-
-	.hero-decoration {
-		position: absolute;
-		top: 0;
-		right: -2rem;
-		width: 300px;
-		height: 300px;
-		opacity: 0.1;
-	}
-
-	.deco-circle {
-		position: absolute;
-		border-radius: 50%;
-		background: var(--accent-color);
-	}
-
-	.deco-circle:nth-child(1) {
-		width: 200px;
-		height: 200px;
-		top: -50px;
-		right: 50px;
-	}
-
-	.deco-circle:nth-child(2) {
-		width: 120px;
-		height: 120px;
-		top: 20px;
-		right: 150px;
-	}
-
-	.deco-circle:nth-child(3) {
-		width: 80px;
-		height: 80px;
-		top: 100px;
-		right: 80px;
-	}
-
 	.section-header {
 		display: flex;
 		align-items: center;

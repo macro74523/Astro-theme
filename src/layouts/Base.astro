@@ -3,7 +3,6 @@ import BaseHead from "@/components/BaseHead.astro";
 import SkipLink from "@/components/SkipLink.astro";
 import ThemeProvider from "@/components/ThemeProvider.astro";
 import Footer from "@/components/layout/Footer.astro";
-import Header from "@/components/layout/Header.astro";
 import { siteConfig } from "@/site.config";
 import type { SiteMeta } from "@/types";
 
@@ -24,13 +23,21 @@ const {
 			href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css"
 		/></head
 	>
-	<!-- 修改 max-w-6xl 最大宽度-->
 	<body
-		class="mx-auto flex min-h-screen max-w-4xl flex-col bg-bgColor px-4 pt-16 font-mono text-sm font-normal text-textColor antialiased sm:px-8"
+		class="mx-auto flex min-h-screen max-w-4xl flex-col bg-bgColor px-4 pt-4 font-mono text-sm font-normal text-textColor antialiased sm:px-8"
 	>
 		<ThemeProvider />
 		<SkipLink />
-		<Header />
+		<header class="mb-8 flex flex-col items-center gap-3">
+			<img
+				alt="Logo"
+				class="h-16 w-auto"
+				src="https://img.cdn1.vip/i/69f9573b5292f_1777948475.webp"
+			/>
+			<a href="/">
+				<span class="text-lg font-bold">欢迎来到 {siteConfig.title}</span>
+			</a>
+		</header>
 		<main id="main">
 			<slot />
 		</main>
