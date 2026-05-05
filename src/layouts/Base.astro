@@ -21,11 +21,10 @@ const {
 <html class="scroll-smooth" lang={siteConfig.lang}>
 	<head>
 		<BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css"
-		/></head
-	>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css" />
+		<script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+		></script>
+	</head>
 	<body
 		class="mx-auto flex min-h-screen max-w-7xl flex-col bg-bgColor px-1 pt-4 font-mono text-sm font-normal text-textColor antialiased sm:px-3 lg:px-6"
 	>
