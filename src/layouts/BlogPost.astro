@@ -16,6 +16,7 @@ const { ogImage, title, description, updatedDate, publishDate } = post.data;
 const socialImage = ogImage ?? `/og-image/${post.id}.png`;
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
 const { headings } = await render(post);
+const hasHeadings = headings.length > 0;
 ---
 
 <BaseLayout
@@ -26,12 +27,15 @@ const { headings } = await render(post);
 		title,
 	}}
 >
-	<div class="gap-x-10 lg:flex lg:items-start">
-		{!!headings.length && <TOC headings={headings} />}
+	<div class:list={["gap-x-10", "lg:flex", "lg:items-start"]}>
+		{hasHeadings && <TOC headings={headings} />}
 		<article class="flex-grow break-words" data-pagefind-body>
 			<div id="blog-hero"><Masthead content={post} /></div>
 			<div
-				class="prose prose-sm prose-cactus mt-12 max-w-2xl prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none"
+				class:list={[
+					"prose prose-sm prose-cactus mt-12 max-w-2xl prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none",
+					!hasHeadings && "no-toc-max",
+				]}
 			>
 				<slot />
 				<WebMentions />
@@ -75,3 +79,9 @@ const { headings } = await render(post);
 	const observer = new IntersectionObserver(callback);
 	observer.observe(targetHeader);
 </script>
+
+<style>
+	.no-toc-max {
+		max-width: none !important;
+	}
+</style>

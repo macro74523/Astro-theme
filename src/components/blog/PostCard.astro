@@ -33,6 +33,8 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 				{coverSrc && !hasExternalImage(ogImage) && (
 					<Image alt={post.data.coverImage.alt} class="cover-img" src={coverSrc} />
 				)}
+
+				{post.data.tags?.length > 0 && <span class="card-tag">{post.data.tags[0]}</span>}
 			</div>
 		)
 	}
@@ -45,10 +47,8 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 				{post.data.title}
 			</h2>
 			{
-				post.data.tags?.length > 0 && (
-					<span class="shrink-0 rounded-full bg-accent/10 px-2 py-0.5 text-xs text-accent dark:bg-accent-2/10 dark:text-accent-2">
-						{post.data.tags[0]}
-					</span>
+				(!hasCover || !post.data.tags?.length) && post.data.tags?.length > 0 && (
+					<span class="tag">{post.data.tags[0]}</span>
 				)
 			}
 		</div>
@@ -65,7 +65,7 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 
 <style>
 	.card-cover {
-		aspect-ratio: 4 / 3;
+		aspect-ratio: 3 / 4;
 		overflow: hidden;
 		position: relative;
 	}
@@ -77,5 +77,29 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 		height: 100%;
 		object-fit: cover;
 		object-position: center;
+	}
+
+	.card-tag {
+		position: absolute;
+		bottom: 0.75rem;
+		right: 0.75rem;
+		display: inline-block;
+		padding: 0.25rem 0.5rem;
+		font-size: 0.7rem;
+		border-radius: 4px;
+		background: transparent;
+		color: #fff;
+		border: 1px solid #fff;
+		z-index: 5;
+	}
+
+	.tag {
+		display: inline-block;
+		padding: 0.25rem 0.75rem;
+		font-size: 0.75rem;
+		border-radius: 4px;
+		background: transparent;
+		color: #fff;
+		border: 1px solid #fff;
 	}
 </style>

@@ -13,7 +13,8 @@ const {
 <li class={`${depth > 2 ? "ms-2" : ""}`}>
 	<a
 		aria-label={`Scroll to section: ${text}`}
-		class={`block line-clamp-2 hover:text-accent ${depth <= 2 ? "mt-3" : "mt-2 text-[0.6875rem]"}`}
+		class={`toc-link line-clamp-2 ${depth <= 2 ? "mt-3" : "mt-2 text-[0.6875rem]"}`}
+		data-slug={slug}
 		href={`#${slug}`}><span class="me-0.5">#</span>{text}</a
 	>
 	{
@@ -26,3 +27,80 @@ const {
 		)
 	}
 </li>
+
+<style>
+	.toc-link {
+		display: block;
+		color: #94a3b8;
+		text-decoration: none;
+		transition: all 0.2s;
+		font-size: 0.875rem;
+		font-weight: 400;
+	}
+
+	.toc-link.active {
+		color: #f97316;
+		font-weight: 600;
+	}
+
+	.dark .toc-link.active {
+		color: #22c55e;
+	}
+
+	li > ul .toc-link.active {
+		color: #f97316;
+	}
+</style>
+
+<script>
+	function initTocScrollSpy() {
+		const links = document.querySelectorAll<HTMLAnchorElement>(".toc-link[data-slug]");
+
+		if (links.length === 0) return;
+
+		const slugMap = new Map<string, HTMLAnchorElement>();
+		links.forEach((link) => {
+			const slug = link.dataset.slug;
+			if (slug) slugMap.set(slug, link);
+		});
+
+		const headingIds = Array.from(slugMap.keys());
+		const headings = headingIds
+			.map((id) => document.getElementById(id))
+			.filter((el): el is HTMLElement => el !== null);
+
+		function updateActiveLink() {
+			let currentSlug = "";
+
+			for (const heading of headings) {
+				const rect = heading.getBoundingClientRect();
+				if (rect.top <= 100) {
+					currentSlug = heading.id;
+				}
+			}
+
+			slugMap.forEach((link, slug) => {
+				if (slug === currentSlug) {
+					link.classList.add("active");
+				} else {
+					link.classList.remove("active");
+				}
+			});
+		}
+
+		updateActiveLink();
+
+		let ticking = false;
+		window.addEventListener("scroll", () => {
+			if (!ticking) {
+				requestAnimationFrame(() => {
+					updateActiveLink();
+					ticking = false;
+				});
+				ticking = true;
+			}
+		});
+	}
+
+	initTocScrollSpy();
+</script>
