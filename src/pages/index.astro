@@ -16,6 +16,8 @@ const allPostsByDate = allPosts
 const MAX_NOTES = 0;
 const allNotes = await getCollection("note");
 const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
+
+const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
 ---
 
 <PageLayout meta={{ title: "主页" }}>
@@ -29,6 +31,18 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 			</h2>
 			<a href="/posts/" class="more-link">查看全部 →</a>
 		</div>
+
+		{allTags.length > 0 && (
+			<div class="tags-bar">
+				<span class="tags-label">标签：</span>
+				<div class="tags-list">
+					{allTags.map((tag) => (
+						<span class="tag">{tag}</span>
+					))}
+				</div>
+			</div>
+		)}
+
 		<div class="posts-grid">
 			{
 				allPostsByDate.map((p) => (
@@ -68,7 +82,7 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 1.5rem;
+		margin-bottom: 1rem;
 	}
 
 	.section-title {
@@ -96,6 +110,41 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 
 	.more-link:hover {
 		opacity: 0.7;
+	}
+
+	.tags-bar {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1.5rem;
+		flex-wrap: wrap;
+	}
+
+	.tags-label {
+		font-size: 0.875rem;
+		color: #64748b;
+		font-weight: 500;
+	}
+
+	.tags-list {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.tag {
+		display: inline-block;
+		padding: 0.25rem 0.75rem;
+		font-size: 0.75rem;
+		border-radius: 9999px;
+		background: var(--accent-color);
+		color: white;
+		opacity: 0.8;
+		transition: opacity 0.2s;
+	}
+
+	.tag:hover {
+		opacity: 1;
 	}
 
 	.posts-section {
