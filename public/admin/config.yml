@@ -54,14 +54,22 @@ collections:
         }
       - { label: "标签", name: "tags", widget: "list", required: true }
       - {
+          label: "封面图",
+          name: "coverImage",
+          widget: "object",
+          required: false,
+          fields:
+            - { label: "图片地址", name: "src", widget: "image", required: true }
+            - { label: "图片描述", name: "alt", widget: "string", required: true }
+        }
+      - {
           label: "ogImage",
           name: "ogImage",
           widget: "string",
           default: "/social-card.avif",
-          required: true,
+          required: false,
         }
       - { label: "正文", name: "body", widget: "markdown" }
 
 media_folder: "public/assets/images" # 文件将被存储在仓库中的位置
 public_folder: "/assets/images" # 上传媒体文件的 src 属性
-
