@@ -8,6 +8,7 @@ type Props = {
 
 const { post } = Astro.props;
 
+const isImageUrl = (str?: string) => str?.startsWith("http");
 const isBV = (str?: string) => str?.startsWith("BV");
 ---
 
@@ -16,12 +17,22 @@ const isBV = (str?: string) => str?.startsWith("BV");
 		<span class="sr-only">阅读 {post.data.title}</span>
 	</a>
 
-	{post.data.coverImage && !isBV(post.data.ogImage) && (
+	{post.data.coverImage && !isImageUrl(post.data.ogImage) && !isBV(post.data.ogImage) && (
 		<div class="aspect-[16/9] overflow-hidden">
 			<Image
 				alt={post.data.coverImage.alt}
 				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 				src={post.data.coverImage.src}
+			/>
+		</div>
+	)}
+
+	{isImageUrl(post.data.ogImage) && (
+		<div class="aspect-[16/9] overflow-hidden">
+			<img
+				alt={post.data.title}
+				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+				src={post.data.ogImage}
 			/>
 		</div>
 	)}
@@ -32,7 +43,7 @@ const isBV = (str?: string) => str?.startsWith("BV");
 				alt={post.data.title}
 				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 				data-bv={post.data.ogImage}
-				src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+				src=""
 			/>
 		</div>
 	)}
@@ -67,23 +78,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		const bvid = img.getAttribute("data-bv");
 		if (!bvid) return;
 
-		img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-
-		const apiUrl = `https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`;
-
-		fetch(apiUrl)
+		fetch(`https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`)
 			.then((res) => res.json())
 			.then((data) => {
 				if (data.code === 0 && data.data?.pic) {
 					img.src = data.data.pic;
-				} else {
-					img.src = "";
 				}
 			})
-			.catch((err) => {
-				console.error("获取B站封面失败:", err);
-				img.src = "";
-			});
+			.catch(() => {});
 	});
 });
 </script>
