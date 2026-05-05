@@ -19,7 +19,8 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 ---
 
 <article
-	class="group relative flex flex-col overflow-hidden rounded-lg border border-accent/20 bg-bgColor transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/10 dark:border-accent-2/20 dark:bg-accent-2/5 dark:hover:border-accent-2/40 dark:hover:shadow-accent-2/10"
+	class="group relative flex flex-col overflow-hidden rounded border border-accent/20 bg-bgColor transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/10 dark:border-accent-2/20 dark:bg-accent-2/5 dark:hover:border-accent-2/40 dark:hover:shadow-accent-2/10"
+	style="break-inside: avoid;"
 >
 	<a class="absolute inset-0 z-10" data-astro-prefetch href={`/posts/${post.id}/`}>
 		<span class="sr-only">阅读 {post.data.title}</span>
@@ -91,7 +92,7 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 		display: inline-block;
 		padding: 0.25rem 0.5rem;
 		font-size: 0.7rem;
-		border-radius: 4px;
+		border-radius: 2px;
 		background: transparent;
 		color: #fff;
 		border: 1px solid #fff;

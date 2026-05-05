@@ -23,31 +23,30 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
 <PageLayout meta={{ title: "主页" }}>
 	<section aria-label="Blog post list" class="posts-section">
 		<div class="section-header">
-			<h2 class="section-title">
-				<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<path
-						d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-					></path>
-				</svg>
-				最近文章
-			</h2>
-			<a href="/posts/" class="more-link">查看全部 →</a>
+			<div class="section-header-left">
+				<h2 class="section-title">
+					<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path
+							d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+						></path>
+					</svg>
+					最近文章
+				</h2>
+				{
+					allTags.length > 0 && (
+						<div class="tags-bar">
+							<div class="tags-list">
+								{allTags.map((tag) => (
+									<a href={`/tags/${tag}`} class="tag">
+										{tag}
+									</a>
+								))}
+							</div>
+						</div>
+					)
+				}
+			</div>
 		</div>
-
-		{
-			allTags.length > 0 && (
-				<div class="tags-bar">
-					<span class="tags-label">标签：</span>
-					<div class="tags-list">
-						{allTags.map((tag) => (
-							<a href={`/tags/${tag}`} class="tag">
-								{tag}
-							</a>
-						))}
-					</div>
-				</div>
-			)
-		}
 
 		<div class="posts-grid">
 			{allPostsByDate.map((p) => <PostCard post={p} />)}
@@ -90,9 +89,16 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
 <style>
 	.section-header {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-between;
 		margin-bottom: 1rem;
+		gap: 1rem;
+	}
+
+	.section-header-left {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
 	}
 
 	.section-title {
@@ -111,29 +117,12 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
 		color: var(--accent-color);
 	}
 
-	.more-link {
-		font-size: 0.875rem;
-		color: var(--accent-color);
-		text-decoration: none;
-		transition: opacity 0.2s;
-	}
-
-	.more-link:hover {
-		opacity: 0.7;
-	}
-
 	.tags-bar {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		margin-bottom: 1.5rem;
 		flex-wrap: wrap;
-	}
-
-	.tags-label {
-		font-size: 0.875rem;
-		color: #64748b;
-		font-weight: 500;
+		margin-left: 0.5rem;
 	}
 
 	.tags-list {
@@ -188,8 +177,16 @@ const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
 		grid-template-columns: repeat(2, 1fr);
 	}
 
+	@media (max-width: 640px) {
+		.posts-grid {
+			columns: 2;
+			gap: 0.5rem;
+		}
+	}
+
 	@media (min-width: 768px) {
 		.posts-grid {
+			display: grid;
 			grid-template-columns: repeat(3, 1fr);
 			gap: 0.75rem;
 		}
