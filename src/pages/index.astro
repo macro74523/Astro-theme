@@ -23,7 +23,7 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 	<section class="hero">
 		<div class="hero-content">
 			<h1 class="hero-title">
-				欢迎来到<span class="highlight">{siteConfig.title}</span>
+				欢迎来到 <span class="highlight">{siteConfig.title}</span>
 			</h1>
 			<p class="hero-desc">{siteConfig.description}</p>
 			<div class="hero-stats">
@@ -109,10 +109,7 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 	}
 
 	.highlight {
-		background: linear-gradient(135deg, var(--accent-color), var(--accent-2-color));
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
+		color: var(--accent-color);
 	}
 
 	.hero-desc {
@@ -227,7 +224,7 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 	.posts-grid {
 		display: grid;
 		gap: 1.5rem;
-		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		grid-template-columns: repeat(3, 1fr);
 	}
 
 	.notes-section {
