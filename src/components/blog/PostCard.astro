@@ -19,7 +19,10 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 ---
 
 <article
-	class="group relative flex flex-col overflow-hidden rounded border border-accent/20 bg-bgColor transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/10 dark:border-accent-2/20 dark:bg-accent-2/5 dark:hover:border-accent-2/40 dark:hover:shadow-accent-2/10"
+	class:list={[
+		"group relative flex flex-col overflow-hidden rounded border border-accent/20 bg-bgColor transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/10 dark:border-accent-2/20 dark:bg-accent-2/5 dark:hover:border-accent-2/40 dark:hover:shadow-accent-2/10",
+		!hasCover && "post-card-no-cover",
+	]}
 	style="break-inside: avoid;"
 >
 	<a class="absolute inset-0 z-10" data-astro-prefetch href={`/posts/${post.id}/`}>
@@ -41,23 +44,18 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 	}
 
 	<div class="flex flex-1 flex-col p-4">
-		<div class="flex flex-wrap items-center gap-2">
-			<h2
-				class="text-base font-semibold leading-tight text-accent-2 transition-colors group-hover:text-accent dark:text-accent-2 dark:group-hover:text-accent-2"
-			>
-				{post.data.title}
-			</h2>
-			{
-				(!hasCover || !post.data.tags?.length) && post.data.tags?.length > 0 && (
-					<span class="tag">{post.data.tags[0]}</span>
-				)
-			}
-		</div>
+		<h2
+			class="line-clamp-1 text-base font-semibold leading-tight text-accent-2 transition-colors group-hover:text-accent dark:text-accent-2 dark:group-hover:text-accent-2"
+			title={post.data.title}
+		>
+			{post.data.title}
+		</h2>
 
 		{
 			!hasCover && (
 				<p class="mt-2 line-clamp-2 flex-1 text-sm text-gray-700 dark:text-gray-300">
 					{post.data.description}
+					{post.data.tags?.length > 0 && <span class="tag-inline">#{post.data.tags[0]}</span>}
 				</p>
 			)
 		}
@@ -107,5 +105,18 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 		background: transparent;
 		color: #fff;
 		border: 1px solid #fff;
+	}
+
+	.tag-inline {
+		display: inline-block;
+		padding: 0.25rem 0.75rem;
+		font-size: 0.75rem;
+		border-radius: 4px;
+	}
+
+	@media (min-width: 768px) {
+		.post-card-no-cover {
+			height: 450px !important;
+		}
 	}
 </style>

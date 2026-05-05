@@ -19,12 +19,13 @@ const meta = {
 			allTags.map(([tag, _]) => (
 				<li>
 					<a
-						class="tag-cloud-item inline-flex items-center px-[0.875rem] py-[0.375rem] text-sm font-medium rounded-md bg-[rgba(22,101,52,0.08)] text-[#166534] border border-[rgba(22,101,52,0.3)] no-underline transition-all duration-250 hover:bg-[rgba(22,101,52,0.15)] hover:border-[rgba(22,101,52,0.5)] hover:-translate-y-[1px] hover:shadow-[0_2px_8px_rgba(22,101,52,0.12)] dark:bg-[rgba(134,239,172,0.08)] dark:text-[#86efac] dark:border-[rgba(134,239,172,0.3)] dark:hover:bg-[rgba(134,239,172,0.15)] dark:hover:border-[rgba(134,239,172,0.5)] dark:hover:shadow-[0_2px_8px_rgba(134,239,172,0.12)]"
+						class="tag-cloud-item duration-250 inline-flex items-center rounded-md border border-[rgba(22,101,52,0.3)] bg-[rgba(22,101,52,0.08)] px-[0.875rem] py-[0.375rem] text-sm font-medium text-[#166534] no-underline transition-all hover:-translate-y-[1px] hover:border-[rgba(22,101,52,0.5)] hover:bg-[rgba(22,101,52,0.15)] hover:shadow-[0_2px_8px_rgba(22,101,52,0.12)] dark:border-[rgba(134,239,172,0.3)] dark:bg-[rgba(134,239,172,0.08)] dark:text-[#86efac] dark:hover:border-[rgba(134,239,172,0.5)] dark:hover:bg-[rgba(134,239,172,0.15)] dark:hover:shadow-[0_2px_8px_rgba(134,239,172,0.12)]"
 						data-astro-prefetch
 						href={`/tags/${tag}/`}
 						title={`View posts with the tag: ${tag}`}
 					>
-						<span class="mr-1">#</span>{tag}
+						<span class="mr-1">#</span>
+						{tag}
 					</a>
 				</li>
 			))

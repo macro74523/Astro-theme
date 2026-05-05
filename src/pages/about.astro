@@ -23,93 +23,97 @@ const meta = {
 ---
 
 <script is:inline>
-async function fetchGitHubContributions() {
-	try {
-		const response = await fetch('https://github-contributions-api.jogruber.de/v4/macro74523');
-		const data = await response.json();
+	async function fetchGitHubContributions() {
+		try {
+			const response = await fetch("https://github-contributions-api.jogruber.de/v4/macro74523");
+			const data = await response.json();
 
-		const contributions = data.contributions.slice(-365);
-		const labels = contributions.map(c => {
-			const date = new Date(c.date);
-			return `${date.getMonth() + 1}/${date.getDate()}`;
-		});
-		const values = contributions.map(c => c.count);
-
-		const ctx = document.getElementById('contributionsChart');
-		if (ctx && typeof Chart !== 'undefined') {
-			new Chart(ctx, {
-				type: 'line',
-				data: {
-					labels: labels,
-					datasets: [{
-						label: '贡献数',
-						data: values,
-						borderColor: '#22c55e',
-						backgroundColor: 'rgba(34, 197, 94, 0.1)',
-						borderWidth: 2,
-						fill: true,
-						tension: 0.4,
-						pointRadius: 0,
-						pointHoverRadius: 4,
-						pointHoverBackgroundColor: '#22c55e'
-					}]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						legend: { display: false },
-						tooltip: {
-							callbacks: {
-								title: function(context) {
-									const idx = context[0].dataIndex;
-									return contributions[idx].date;
-								}
-							}
-						}
-					},
-					scales: {
-						x: {
-							display: true,
-							grid: { display: false },
-							ticks: {
-								maxTicksLimit: 12,
-								color: '#94a3b8',
-								font: { size: 10 }
-							}
-						},
-						y: {
-							display: false,
-							grid: { display: false },
-							min: 0
-						}
-					},
-					interaction: {
-						intersect: false,
-						mode: 'index'
-					}
-				}
+			const contributions = data.contributions.slice(-365);
+			const labels = contributions.map((c) => {
+				const date = new Date(c.date);
+				return `${date.getMonth() + 1}/${date.getDate()}`;
 			});
-		}
-	} catch (error) {
-		console.warn('Failed to fetch GitHub contributions:', error);
-	}
-}
+			const values = contributions.map((c) => c.count);
 
-document.addEventListener('DOMContentLoaded', fetchGitHubContributions);
+			const ctx = document.getElementById("contributionsChart");
+			if (ctx && typeof Chart !== "undefined") {
+				new Chart(ctx, {
+					type: "line",
+					data: {
+						labels: labels,
+						datasets: [
+							{
+								label: "贡献数",
+								data: values,
+								borderColor: "#22c55e",
+								backgroundColor: "rgba(34, 197, 94, 0.1)",
+								borderWidth: 2,
+								fill: true,
+								tension: 0.4,
+								pointRadius: 0,
+								pointHoverRadius: 4,
+								pointHoverBackgroundColor: "#22c55e",
+							},
+						],
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: { display: false },
+							tooltip: {
+								callbacks: {
+									title: function (context) {
+										const idx = context[0].dataIndex;
+										return contributions[idx].date;
+									},
+								},
+							},
+						},
+						scales: {
+							x: {
+								display: true,
+								grid: { display: false },
+								ticks: {
+									maxTicksLimit: 12,
+									color: "#94a3b8",
+									font: { size: 10 },
+								},
+							},
+							y: {
+								display: false,
+								grid: { display: false },
+								min: 0,
+							},
+						},
+						interaction: {
+							intersect: false,
+							mode: "index",
+						},
+					},
+				});
+			}
+		} catch (error) {
+			console.warn("Failed to fetch GitHub contributions:", error);
+		}
+	}
+
+	document.addEventListener("DOMContentLoaded", fetchGitHubContributions);
 </script>
 
 <PageLayout meta={meta}>
 	<h1 class="title mb-8">关于</h1>
 
 	<div class="stats-grid mb-12">
-		{siteStats.map((stat) => (
-			<div class="stat-card">
-				<span class="stat-icon">{stat.icon}</span>
-				<span class="stat-value">{stat.value}</span>
-				<span class="stat-label">{stat.label}</span>
-			</div>
-		))}
+		{
+			siteStats.map((stat) => (
+				<div class="stat-card">
+					<span class="stat-icon">{stat.icon}</span>
+					<span class="stat-value">{stat.value}</span>
+					<span class="stat-label">{stat.label}</span>
+				</div>
+			))
+		}
 	</div>
 
 	<div class="about-content">
@@ -326,7 +330,7 @@ document.addEventListener('DOMContentLoaded', fetchGitHubContributions);
 			flex-direction: column;
 			align-items: flex-start;
 		}
-		
+
 		.card-icon {
 			font-size: 1.75rem;
 		}

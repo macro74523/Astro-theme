@@ -1,20 +1,21 @@
 <div id="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-bgColor">
 	<div class="flex flex-col items-center gap-4">
-		<div class="relative">
-			<div class="h-12 w-12 animate-spin rounded-full border-4 border-accent/20 border-t-accent"></div>
-			<div class="absolute inset-0 animate-ping h-12 w-12 rounded-full border-4 border-accent/30"></div>
-		</div>
+		<img
+			alt="loading"
+			class="h-24 w-auto"
+			src="https://img.cdn1.vip/i/69f9573b5292f_1777948475.webp"
+		/>
 		<span class="text-sm text-textColor/70">加载中...</span>
 	</div>
 </div>
 
 <script>
-	window.addEventListener('load', () => {
-		const loading = document.getElementById('loading');
+	window.addEventListener("load", () => {
+		const loading = document.getElementById("loading");
 		if (loading) {
-			loading.style.opacity = '0';
+			loading.style.opacity = "0";
 			setTimeout(() => {
-				loading.style.display = 'none';
+				loading.style.display = "none";
 			}, 300);
 		}
 	});
