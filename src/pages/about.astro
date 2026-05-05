@@ -1,11 +1,23 @@
 ---
 import PageLayout from "@/layouts/Base.astro";
 import SocialList from "@/components/SocialList.astro";
+import { getAllPosts } from "@/data/post";
+import { getCollection } from "astro:content";
 export const prerender = true;
 
+const allPosts = await getAllPosts();
+const allNotes = await getCollection("note");
+const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
+
+const siteStats = [
+	{ label: "文章", value: allPosts.length, icon: "📝" },
+	{ label: "笔记", value: allNotes.length, icon: "📒" },
+	{ label: "标签", value: allTags.length, icon: "🏷️" },
+	{ label: "分类", value: 3, icon: "📁" },
+];
+
 const meta = {
-	description: "仙人掌主题",
-	// 修改：关于
+	description: "MACRO.VLOG",
 	title: "关于",
 };
 ---
@@ -13,24 +25,211 @@ const meta = {
 <PageLayout meta={meta}>
 	<h1 class="title mb-8">关于</h1>
 
-	<div class="prose prose-sm prose-cactus max-w-none">
-		<p>
-			随笔是一种自由的写作形式，它不受严格的格式和结构的限制，而是以轻松、随意的方式记录生活中的点滴。无论是对日常琐事的感悟，还是对某个瞬间的思考，随笔都能帮助我们捕捉那些容易被遗忘的瞬间。
-		</p>
-		<p>
-			在这里，你可以找到我对生活的观察、对世界的思考，以及对未来的期待。每一篇随笔都是一次心灵的旅程，记录着我在某个时刻的所思所感。
-		</p>
-		<p>
-			札记是一种系统化的记录方式，它帮助我们将学习到的知识、阅读的书籍、观看的电影等内容进行整理和总结。通过札记，我们可以更好地理解所学的内容，并将其转化为自己的知识储备。
-		</p>
-		<p>
-			在这个页面中，你会看到我对书籍、文章、电影等的摘录和思考。每一篇札记都是一次知识的积累，记录着我在学习过程中的收获与感悟。
-		</p>
-		<p>
-			随笔与札记，一个记录生活，一个记录知识。它们是我与世界对话的方式，也是我与自己对话的桥梁。希望这些文字能够带给你一些启发，或者至少让你感受到一丝共鸣。
-		</p>
+	<div class="stats-grid mb-12">
+		{siteStats.map((stat) => (
+			<div class="stat-card">
+				<span class="stat-icon">{stat.icon}</span>
+				<span class="stat-value">{stat.value}</span>
+				<span class="stat-label">{stat.label}</span>
+			</div>
+		))}
+	</div>
+
+	<div class="about-content">
+		<div class="about-card">
+			<div class="card-icon">✍️</div>
+			<div class="card-content">
+				<h3 class="card-title">随笔</h3>
+				<p class="card-text">
+					随笔是一种自由的写作形式，它不受严格的格式和结构的限制，而是以轻松、随意的方式记录生活中的点滴。无论是对日常琐事的感悟，还是对某个瞬间的思考，随笔都能帮助我们捕捉那些容易被遗忘的瞬间。
+				</p>
+				<p class="card-text">
+					在这里，你可以找到我对生活的观察、对世界的思考，以及对未来的期待。每一篇随笔都是一次心灵的旅程，记录着我在某个时刻的所思所感。
+				</p>
+			</div>
+		</div>
+
+		<div class="about-card">
+			<div class="card-icon">📚</div>
+			<div class="card-content">
+				<h3 class="card-title">札记</h3>
+				<p class="card-text">
+					札记是一种系统化的记录方式，它帮助我们将学习到的知识、阅读的书籍、观看的电影等内容进行整理和总结。通过札记，我们可以更好地理解所学的内容，并将其转化为自己的知识储备。
+				</p>
+				<p class="card-text">
+					在这个页面中，你会看到我对书籍、文章、电影等的摘录和思考。每一篇札记都是一次知识的积累，记录着我在学习过程中的收获与感悟。
+				</p>
+			</div>
+		</div>
+
+		<div class="about-card about-card-highlight">
+			<div class="card-icon">💡</div>
+			<div class="card-content">
+				<h3 class="card-title">寄语</h3>
+				<p class="card-text">
+					随笔与札记，一个记录生活，一个记录知识。它们是我与世界对话的方式，也是我与自己对话的桥梁。希望这些文字能够带给你一些启发，或者至少让你感受到一丝共鸣。
+				</p>
+			</div>
+		</div>
 	</div>
 	<div>
 		<SocialList />
 	</div>
 </PageLayout>
+
+<style>
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+	}
+
+	@media (min-width: 768px) {
+		.stats-grid {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+
+	.stat-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 1.5rem 1rem;
+		background: rgba(22, 101, 52, 0.05);
+		border-radius: 12px;
+		border: 1px solid rgba(22, 101, 52, 0.15);
+		transition: all 0.25s ease;
+	}
+
+	.stat-card:hover {
+		background: rgba(22, 101, 52, 0.08);
+		border-color: rgba(22, 101, 52, 0.25);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(22, 101, 52, 0.1);
+	}
+
+	.stat-icon {
+		font-size: 1.75rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.stat-value {
+		font-size: 2rem;
+		font-weight: 700;
+		color: #166534;
+		line-height: 1;
+	}
+
+	.stat-label {
+		font-size: 0.875rem;
+		color: #64748b;
+		margin-top: 0.25rem;
+	}
+
+	.dark .stat-card {
+		background: rgba(134, 239, 172, 0.05);
+		border-color: rgba(134, 239, 172, 0.15);
+	}
+
+	.dark .stat-card:hover {
+		background: rgba(134, 239, 172, 0.08);
+		border-color: rgba(134, 239, 172, 0.25);
+		box-shadow: 0 4px 12px rgba(134, 239, 172, 0.1);
+	}
+
+	.dark .stat-value {
+		color: #86efac;
+	}
+
+	.dark .stat-label {
+		color: #94a3b8;
+	}
+
+	.about-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.about-card {
+		display: flex;
+		gap: 1.25rem;
+		padding: 1.5rem;
+		background: rgba(22, 101, 52, 0.03);
+		border-radius: 12px;
+		border: 1px solid rgba(22, 101, 52, 0.1);
+		transition: all 0.25s ease;
+	}
+
+	.about-card:hover {
+		background: rgba(22, 101, 52, 0.06);
+		border-color: rgba(22, 101, 52, 0.15);
+	}
+
+	.about-card-highlight {
+		background: linear-gradient(135deg, rgba(22, 101, 52, 0.08), rgba(134, 239, 172, 0.05));
+		border-color: rgba(22, 101, 52, 0.2);
+	}
+
+	.card-icon {
+		font-size: 2rem;
+		flex-shrink: 0;
+	}
+
+	.card-content {
+		flex: 1;
+	}
+
+	.card-title {
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: #166534;
+		margin: 0 0 0.75rem 0;
+	}
+
+	.card-text {
+		font-size: 0.9rem;
+		line-height: 1.7;
+		color: #475569;
+		margin: 0 0 0.5rem 0;
+		text-align: justify;
+	}
+
+	.card-text:last-child {
+		margin-bottom: 0;
+	}
+
+	.dark .about-card {
+		background: rgba(134, 239, 172, 0.03);
+		border-color: rgba(134, 239, 172, 0.1);
+	}
+
+	.dark .about-card:hover {
+		background: rgba(134, 239, 172, 0.06);
+		border-color: rgba(134, 239, 172, 0.15);
+	}
+
+	.dark .about-card-highlight {
+		background: linear-gradient(135deg, rgba(134, 239, 172, 0.08), rgba(22, 101, 52, 0.05));
+		border-color: rgba(134, 239, 172, 0.2);
+	}
+
+	.dark .card-title {
+		color: #86efac;
+	}
+
+	.dark .card-text {
+		color: #cbd5e1;
+	}
+
+	@media (max-width: 640px) {
+		.about-card {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+		
+		.card-icon {
+			font-size: 1.75rem;
+		}
+	}
+</style>

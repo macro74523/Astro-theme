@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import Pagination from "@/components/Paginator.astro";
-import PostPreview from "@/components/blog/PostPreview.astro";
+import PostCard from "@/components/blog/PostCard.astro";
 import { getAllPosts, getUniqueTags } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import { collectionDateSort } from "@/utils/date";
@@ -16,7 +16,7 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
 	return uniqueTags.flatMap((tag) => {
 		const filterPosts = sortedPosts.filter((post) => post.data.tags.includes(tag));
 		return paginate(filterPosts, {
-			pageSize: 10,
+			pageSize: 8,
 			params: { tag },
 		});
 	});
@@ -53,19 +53,35 @@ const paginationProps = {
 <PageLayout meta={meta}>
 	<h1 class="title mb-6 flex items-center text-xl">
 		<a class="text-accent sm:hover:underline" href="/tags/">标签</a>
-		<!-- <span class="me-3 ms-2">→</span> -->
 		<span class="ml-3 text-xl">#{tag}</span>
 	</h1>
 	<section aria-label="Blog post list">
-		<ul class="space-y-4">
-			{
-				page.data.map((p) => (
-					<li class="grid gap-2 sm:grid-cols-[auto_1fr]">
-						<PostPreview as="h2" post={p} />
-					</li>
-				))
-			}
-		</ul>
-		<Pagination {...paginationProps} />
+		<div class="posts-grid">
+			{page.data.map((p) => <PostCard post={p} />)}
+		</div>
+		<div class="mt-8 flex justify-center">
+			<Pagination {...paginationProps} />
+		</div>
 	</section>
 </PageLayout>
+
+<style>
+	.posts-grid {
+		display: grid;
+		gap: 0.5rem;
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media (min-width: 768px) {
+		.posts-grid {
+			grid-template-columns: repeat(3, 1fr);
+			gap: 0.75rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.posts-grid {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+</style>
