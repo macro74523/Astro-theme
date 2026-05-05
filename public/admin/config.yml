@@ -1,10 +1,10 @@
 backend:
   name: github
-  branch: main
-  repo: macro74523/Astro-theme
-  site_domain: www.macro.wang
-  base_url: https://www.macro.wang
-  auth_endpoint: oauth
+  branch: main # change this to your branch
+  repo: macro74523/Astro-theme # 1、change this to your repo
+  site_domain: www.macro.wang # 2、change this to your domain
+  base_url: https://www.macro.wang # 3、change this to your prod URL
+  auth_endpoint: oauth # the oauth route provided by the integration
 
 collections:
   - name: "note"
@@ -53,21 +53,15 @@ collections:
           required: true,
         }
       - { label: "标签", name: "tags", widget: "list", required: true }
-      - label: "封面图"
-        name: "coverImage"
-        widget: "object"
-        required: false
-        fields:
-          - { label: "图片地址", name: "src", widget: "image", required: true }
-          - { label: "图片描述", name: "alt", widget: "string", required: true }
       - {
           label: "ogImage",
           name: "ogImage",
           widget: "string",
           default: "/social-card.avif",
-          required: false,
+          required: true,
         }
       - { label: "正文", name: "body", widget: "markdown" }
 
-media_folder: "public/assets/images"
-public_folder: "/assets/images"
+media_folder: "public/assets/images" # 文件将被存储在仓库中的位置
+public_folder: "/assets/images" # 上传媒体文件的 src 属性
+
