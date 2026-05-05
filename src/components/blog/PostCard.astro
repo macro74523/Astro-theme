@@ -8,8 +8,13 @@ type Props = {
 
 const { post } = Astro.props;
 
-const isImageUrl = (str?: string) => str?.startsWith("http");
-const isBV = (str?: string) => str?.startsWith("BV");
+const hasExternalImage = (str?: string) => {
+	if (!str) return false;
+	return str.startsWith("http://") || str.startsWith("https://");
+};
+
+const coverSrc = post.data.coverImage?.src;
+const ogImage = post.data.ogImage;
 ---
 
 <article class="group relative flex flex-col overflow-hidden rounded-lg border border-accent/20 bg-bgColor transition-all hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 dark:border-accent-2/20 dark:bg-accent-2/5 dark:hover:border-accent-2/40 dark:hover:shadow-accent-2/5">
@@ -17,33 +22,22 @@ const isBV = (str?: string) => str?.startsWith("BV");
 		<span class="sr-only">阅读 {post.data.title}</span>
 	</a>
 
-	{post.data.coverImage && !isImageUrl(post.data.ogImage) && !isBV(post.data.ogImage) && (
+	{hasExternalImage(ogImage) && (
+		<div class="aspect-[16/9] overflow-hidden">
+			<img
+				alt={post.data.title}
+				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+				src={ogImage}
+			/>
+		</div>
+	)}
+
+	{coverSrc && !hasExternalImage(ogImage) && (
 		<div class="aspect-[16/9] overflow-hidden">
 			<Image
 				alt={post.data.coverImage.alt}
 				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-				src={post.data.coverImage.src}
-			/>
-		</div>
-	)}
-
-	{isImageUrl(post.data.ogImage) && (
-		<div class="aspect-[16/9] overflow-hidden">
-			<img
-				alt={post.data.title}
-				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-				src={post.data.ogImage}
-			/>
-		</div>
-	)}
-
-	{isBV(post.data.ogImage) && (
-		<div class="aspect-[16/9] overflow-hidden">
-			<img
-				alt={post.data.title}
-				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-				data-bv={post.data.ogImage}
-				src=""
+				src={coverSrc}
 			/>
 		</div>
 	)}
@@ -71,21 +65,3 @@ const isBV = (str?: string) => str?.startsWith("BV");
 		</div>
 	</div>
 </article>
-
-<script is:inline>
-document.addEventListener("DOMContentLoaded", () => {
-	document.querySelectorAll("img[data-bv]").forEach((img) => {
-		const bvid = img.getAttribute("data-bv");
-		if (!bvid) return;
-
-		fetch(`https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`)
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.code === 0 && data.data?.pic) {
-					img.src = data.data.pic;
-				}
-			})
-			.catch(() => {});
-	});
-});
-</script>
