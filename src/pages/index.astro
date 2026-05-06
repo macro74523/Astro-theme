@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import PostCard from "@/components/blog/PostCard.astro";
 import Note from "@/components/note/Note.astro";
+import UpdateCalendar from "@/components/UpdateCalendar.astro";
 import { getAllPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import { collectionDateSort } from "@/utils/date";
@@ -120,6 +121,8 @@ const rightColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 1);
 			</section>
 		)
 	}
+
+	<UpdateCalendar />
 </PageLayout>
 
 <style>

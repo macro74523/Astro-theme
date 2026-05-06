@@ -1,27 +1,41 @@
 ---
 import { type CollectionEntry, render } from "astro:content";
 import FormattedDate from "@/components/FormattedDate.astro";
-import type { HTMLTag, Polymorphic } from "astro/types";
 
-type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+type Props = {
 	note: CollectionEntry<"note">;
-	isPreview?: boolean | undefined;
+	isPreview?: boolean;
 };
 
-const { as: Tag = "div", note, isPreview = false } = Astro.props;
+const { note, isPreview = false } = Astro.props;
 const { Content } = await render(note);
+
+const stickyColors = [
+	"bg-[#FFE4B5]",
+	"bg-[#E6E6FA]",
+	"bg-[#98FB98]",
+	"bg-[#F0E68C]",
+	"bg-[#DDA0DD]",
+	"bg-[#ADD8E6]",
+];
+
+const randomColor = stickyColors[Math.floor(Math.random() * stickyColors.length)];
+const randomRotate = (Math.random() - 0.5) * 4;
+const randomTranslate = Math.random() * 8;
 ---
 
 {
 	isPreview ? (
-		<a
-			href={`/notes/${note.id}/`}
-			class="block rounded-md bg-[rgb(240,240,240)] px-4 py-3 dark:bg-[rgb(33,35,38)] no-underline hover:no-underline"
+		<div
+			class={`group relative block rounded-sm ${randomColor} px-5 py-4 shadow-lg cursor-pointer transition-all duration-300 ease-out hover:shadow-2xl hover:-translate-y-2 hover:rotate-0 hover:scale-[1.02] dark:bg-[#2a2a2a] dark:border dark:border-gray-600`}
+			style={{ transform: `rotate(${randomRotate}deg) translateY(${randomTranslate}px)` }}
+			data-note-id={note.id}
 		>
-			<Tag class="title text-base">
+			<h2 class="title text-base font-bold transition-all duration-200 group-hover:text-accent group-hover:scale-105">
 				{note.data.title}
-			</Tag>
+			</h2>
 			<FormattedDate
+				class="text-xs opacity-70 mt-2 transition-opacity duration-200 group-hover:opacity-100"
 				dateTimeOptions={{
 					hour: "2-digit",
 					minute: "2-digit",
@@ -29,16 +43,46 @@ const { Content } = await render(note);
 				date={note.data.publishDate}
 			/>
 			<div
-				class="prose prose-sm prose-cactus mt-4 max-w-none [&>p:last-of-type]:mb-0 line-clamp-3"
+				class="prose prose-sm prose-cactus mt-4 max-w-none [&>p:last-of-type]:mb-0 line-clamp-3 text-sm transition-all duration-200 group-hover:opacity-90"
 			>
 				<Content />
 			</div>
-		</a>
+			<div class="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-white/60 to-transparent rounded-bl-full shadow-inner"></div>
+			<div class="absolute -bottom-1 -left-1 w-4 h-4 bg-gradient-to-tr from-black/10 to-transparent rounded-tr-full"></div>
+			<div class="absolute inset-0 bg-accent/0 group-hover:bg-accent/5 rounded-sm transition-colors duration-300"></div>
+			<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+				<svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+				</svg>
+			</div>
+			<div class="hidden modal-overlay fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" id={`modal-${note.id}`}>
+				<div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden animate-modal-in" id={`modal-content-${note.id}`}>
+					<div class="modal-header sticky top-0 bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between cursor-move" id={`modal-header-${note.id}`}>
+						<h2 class="text-xl font-bold">{note.data.title}</h2>
+						<button class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors" data-note-id={note.id}>
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</button>
+					</div>
+					<div class="p-6 overflow-y-auto max-h-[calc(80vh-80px)]">
+						<FormattedDate
+							class="text-sm opacity-70 mb-4"
+							date={note.data.publishDate}
+						/>
+						<div class="prose prose-sm prose-cactus max-w-none">
+							<Content />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	) : (
 		<article data-pagefind-body class="px-4 sm:px-0">
-			<Tag class="title">
+			<h1 class="title">
 				{note.data.title}
-			</Tag>
+			</h1>
 			<FormattedDate
 				dateTimeOptions={{
 					hour: "2-digit",
@@ -54,3 +98,94 @@ const { Content } = await render(note);
 		</article>
 	)
 }
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		document.querySelectorAll('[data-note-id]').forEach(card => {
+			card.addEventListener('click', () => {
+				const noteId = card.getAttribute('data-note-id');
+				const modal = document.getElementById(`modal-${noteId}`);
+				if (modal) {
+					modal.classList.remove('hidden');
+					document.body.style.overflow = 'hidden';
+				}
+			});
+		});
+
+		document.querySelectorAll('.modal-close').forEach(button => {
+			button.addEventListener('click', (e) => {
+				e.stopPropagation();
+				const noteId = button.getAttribute('data-note-id');
+				const modal = document.getElementById(`modal-${noteId}`);
+				if (modal) {
+					modal.classList.add('hidden');
+					document.body.style.overflow = '';
+				}
+			});
+		});
+
+		document.querySelectorAll('.modal-overlay').forEach(overlay => {
+			overlay.addEventListener('click', (e) => {
+				if (e.target === overlay) {
+					overlay.classList.add('hidden');
+					document.body.style.overflow = '';
+				}
+			});
+		});
+
+		let dragElement = null;
+		let offsetX = 0;
+		let offsetY = 0;
+
+		document.querySelectorAll('[id^="modal-header-"]').forEach(header => {
+			header.addEventListener('mousedown', (e) => {
+				dragElement = header.parentElement;
+				const rect = dragElement.getBoundingClientRect();
+				offsetX = e.clientX - rect.left;
+				offsetY = e.clientY - rect.top;
+				dragElement.style.cursor = 'grabbing';
+				dragElement.style.transition = 'none';
+			});
+		});
+
+		document.addEventListener('mousemove', (e) => {
+			if (dragElement) {
+				const x = e.clientX - offsetX;
+				const y = e.clientY - offsetY;
+				const maxX = window.innerWidth - dragElement.offsetWidth - 32;
+				const maxY = window.innerHeight - dragElement.offsetHeight - 32;
+				const boundedX = Math.max(16, Math.min(x, maxX));
+				const boundedY = Math.max(16, Math.min(y, maxY));
+				dragElement.style.transform = `translate(${boundedX}px, ${boundedY}px)`;
+				dragElement.style.position = 'fixed';
+				dragElement.style.left = '0';
+				dragElement.style.top = '0';
+				dragElement.style.margin = '0';
+			}
+		});
+
+		document.addEventListener('mouseup', () => {
+			if (dragElement) {
+				dragElement.style.cursor = 'move';
+				dragElement.style.transition = '';
+				dragElement = null;
+			}
+		});
+	});
+</script>
+
+<style>
+	@keyframes modal-in {
+		from {
+			opacity: 0;
+			transform: scale(0.95) translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1) translateY(0);
+		}
+	}
+	.animate-modal-in {
+		animation: modal-in 0.3s ease-out;
+	}
+</style>
