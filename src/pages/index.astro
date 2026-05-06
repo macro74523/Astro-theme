@@ -3,6 +3,7 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import PostCard from "@/components/blog/PostCard.astro";
 import Note from "@/components/note/Note.astro";
 import UpdateCalendar from "@/components/UpdateCalendar.astro";
+import Pagination from "@/components/Paginator.astro";
 import { getAllPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import { collectionDateSort } from "@/utils/date";
@@ -10,8 +11,9 @@ export const prerender = true;
 
 const MAX_POSTS = 12;
 const allPosts = await getAllPosts();
-// 过滤掉带有"示例"标签的文章
-const filteredPosts = allPosts.filter((p) => !(p.data.tags || []).includes("示例"));
+const filteredPosts = allPosts.filter(
+	(p) => !p.data.draft && !(p.data.tags || []).includes("示例"),
+);
 const allPostsByDate = filteredPosts
 	.sort(collectionDateSort)
 	.slice(0, MAX_POSTS) as CollectionEntry<"post">[];
@@ -20,13 +22,14 @@ const MAX_NOTES = 0;
 const allNotes = await getCollection("note");
 const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 
-// 过滤掉"示例"标签
 const allTags = [
 	...new Set(filteredPosts.flatMap((p) => (p.data.tags || []).filter((t) => t !== "示例"))),
 ];
 
 const leftColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 0);
 const rightColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 1);
+
+const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 ---
 
 <PageLayout meta={{ title: "主页" }}>
@@ -88,6 +91,19 @@ const rightColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 1);
 				))
 			}
 		</div>
+
+		{
+			totalPages > 1 && (
+				<Pagination
+					currentPage={1}
+					totalPages={totalPages}
+					nextUrl={{
+						text: "下一页",
+						url: "/page/2/",
+					}}
+				/>
+			)
+		}
 	</section>
 
 	{
@@ -300,13 +316,10 @@ const rightColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 1);
 			button.addEventListener("click", (e) => {
 				e.preventDefault();
 
-				// Remove active class from all buttons
 				tagButtons.forEach((btn) => btn.classList.remove("active"));
 
-				// Add active class to clicked button
 				button.classList.add("active");
 
-				// Filter posts
 				const selectedTag = button.dataset.tag;
 				filterPostsByTag(selectedTag);
 			});

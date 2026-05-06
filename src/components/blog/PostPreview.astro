@@ -18,7 +18,11 @@ const { as: Tag = "div", post, withDesc = false } = Astro.props;
 />
 <Tag>
 	{post.data.draft && <span class="text-accent">(Draft) </span>}
-	<a class="no-underline text-lg hover:text-accent transition-colors" data-astro-prefetch href={`/posts/${post.id}/`}>
+	<a
+		class="text-lg no-underline transition-colors hover:text-accent lg:text-xl"
+		data-astro-prefetch
+		href={`/posts/${post.id}/`}
+	>
 		{post.data.title}
 	</a>
 </Tag>

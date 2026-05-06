@@ -4,33 +4,49 @@ import type { PaginationLink } from "@/types";
 interface Props {
 	nextUrl?: PaginationLink;
 	prevUrl?: PaginationLink;
+	currentPage?: number;
+	totalPages?: number;
 }
 
-const { nextUrl, prevUrl } = Astro.props;
+const { nextUrl, prevUrl, currentPage = 1, totalPages = 1 } = Astro.props;
+
+const getPageUrl = (pageNum: number) => {
+	if (pageNum === 1) return "/";
+	return `/page/${pageNum}/`;
+};
 ---
 
 {
-	(prevUrl || nextUrl) && (
-		// 修改：翻页
-		<nav class="mt-8 flex items-center gap-x-4 font-bold text-accent">
+	(prevUrl || nextUrl || totalPages > 1) && (
+		<nav class="mt-8 flex items-center justify-center gap-2 font-bold">
 			{prevUrl && (
 				<a
-					class="me-auto py-2 underline-offset-2 sm:hover:underline"
+					class="rounded-lg px-4 py-2 text-accent transition-colors hover:bg-accent/10"
 					data-astro-prefetch
 					href={prevUrl.url}
 				>
-					{prevUrl.srLabel && <span class="sr-only">{prevUrl.srLabel}</span>}
-					{prevUrl.text ? prevUrl.text : "Previous"}
+					←
 				</a>
 			)}
+			{Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+				<a
+					key={page}
+					class={`rounded-lg px-4 py-2 transition-colors ${
+						page === currentPage ? "bg-accent text-white" : "text-accent hover:bg-accent/10"
+					}`}
+					data-astro-prefetch
+					href={getPageUrl(page)}
+				>
+					{page}
+				</a>
+			))}
 			{nextUrl && (
 				<a
-					class="ms-auto py-2 underline-offset-2 sm:hover:underline"
+					class="rounded-lg px-4 py-2 text-accent transition-colors hover:bg-accent/10"
 					data-astro-prefetch
 					href={nextUrl.url}
 				>
-					{nextUrl.srLabel && <span class="sr-only">{nextUrl.srLabel}</span>}
-					{nextUrl.text ? nextUrl.text : "Next"}
+					→
 				</a>
 			)}
 		</nav>
