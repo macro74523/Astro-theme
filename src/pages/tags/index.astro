@@ -13,22 +13,24 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-	<h1 class="title mb-6">全部标签</h1>
-	<ul class="flex flex-wrap gap-3">
-		{
-			allTags.map(([tag, _]) => (
-				<li>
-					<a
-						class="tag-cloud-item duration-250 inline-flex items-center rounded-md border border-[rgba(22,101,52,0.3)] bg-[rgba(22,101,52,0.08)] px-[0.875rem] py-[0.375rem] text-sm font-medium text-[#166534] no-underline transition-all hover:-translate-y-[1px] hover:border-[rgba(22,101,52,0.5)] hover:bg-[rgba(22,101,52,0.15)] hover:shadow-[0_2px_8px_rgba(22,101,52,0.12)] dark:border-[rgba(134,239,172,0.3)] dark:bg-[rgba(134,239,172,0.08)] dark:text-[#86efac] dark:hover:border-[rgba(134,239,172,0.5)] dark:hover:bg-[rgba(134,239,172,0.15)] dark:hover:shadow-[0_2px_8px_rgba(134,239,172,0.12)]"
-						data-astro-prefetch
-						href={`/tags/${tag}/`}
-						title={`View posts with the tag: ${tag}`}
-					>
-						<span class="mr-1">#</span>
-						{tag}
-					</a>
-				</li>
-			))
-		}
-	</ul>
+	<div class="px-4 sm:px-0">
+		<h1 class="title mb-6">全部标签</h1>
+		<ul class="flex flex-wrap gap-3">
+			{
+				allTags.map(([tag, _]) => (
+					<li>
+						<a
+							class="tag-cloud-item duration-250 inline-flex items-center rounded-md border border-[hsl(159,64%,45%,0.3)] bg-[hsl(159,64%,45%,0.08)] px-[0.875rem] py-[0.375rem] text-sm font-medium text-[hsl(159,64%,45%)] no-underline transition-all hover:-translate-y-[1px] hover:border-[hsl(159,64%,45%,0.5)] hover:bg-[hsl(159,64%,45%,0.15)] hover:shadow-[0_2px_8px_rgba(22,101,52,0.12)] dark:border-[hsl(159,64%,45%,0.3)] dark:bg-[hsl(159,64%,45%,0.08)] dark:text-[hsl(159,64%,45%)] dark:hover:border-[hsl(159,64%,45%,0.5)] dark:hover:bg-[hsl(159,64%,45%,0.15)] dark:hover:shadow-[0_2px_8px_rgba(134,239,172,0.12)]"
+							data-astro-prefetch
+							href={`/tags/${tag}/`}
+							title={`View posts with the tag: ${tag}`}
+						>
+							<span class="mr-1">#</span>
+							{tag}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
 </PageLayout>

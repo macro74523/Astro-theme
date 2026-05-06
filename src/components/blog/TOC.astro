@@ -14,9 +14,9 @@ const toc = generateToc(headings);
 
 {
 	headings.length > 0 && (
-		<aside class="sticky top-20 order-2 -me-32 hidden basis-64 lg:block">
-			<h2 class="title text-base">目录</h2>
-			<ul class="mt-4 text-sm">
+		<aside id="table-of-contents">
+			<h2 class="title text-base transition-all duration-300">目录</h2>
+			<ul class="mt-4 text-sm transition-all duration-300">
 				{toc.map((heading) => (
 					<TOCHeading heading={heading} />
 				))}
@@ -24,3 +24,18 @@ const toc = generateToc(headings);
 		</aside>
 	)
 }
+
+<script>
+	const toc = document.getElementById("table-of-contents");
+	if (toc) {
+		window.addEventListener("scroll", () => {
+			const scrollY = window.scrollY;
+			if (scrollY > 100) {
+				toc.style.transform = "scale(1.05)";
+				toc.style.transformOrigin = "top left";
+			} else {
+				toc.style.transform = "scale(1)";
+			}
+		});
+	}
+</script>

@@ -9,7 +9,9 @@ export const prerender = true;
 
 const MAX_POSTS = 12;
 const allPosts = await getAllPosts();
-const allPostsByDate = allPosts
+// 过滤掉带有"示例"标签的文章
+const filteredPosts = allPosts.filter((p) => !(p.data.tags || []).includes("示例"));
+const allPostsByDate = filteredPosts
 	.sort(collectionDateSort)
 	.slice(0, MAX_POSTS) as CollectionEntry<"post">[];
 
@@ -17,7 +19,10 @@ const MAX_NOTES = 0;
 const allNotes = await getCollection("note");
 const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 
-const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
+// 过滤掉"示例"标签
+const allTags = [
+	...new Set(filteredPosts.flatMap((p) => (p.data.tags || []).filter((t) => t !== "示例"))),
+];
 
 const leftColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 0);
 const rightColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 1);
@@ -172,11 +177,11 @@ const rightColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 1);
 	}
 
 	.tag-nav:hover {
-		color: #166534;
+		color: hsl(var(--theme-accent));
 	}
 
 	.tag-nav.active {
-		color: #166534;
+		color: hsl(var(--theme-accent));
 		font-weight: 600;
 	}
 
@@ -187,7 +192,7 @@ const rightColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 1);
 		left: 0;
 		width: 100%;
 		height: 3px;
-		background-color: #166534;
+		background-color: hsl(var(--theme-accent));
 		border-radius: 2px;
 	}
 
@@ -198,17 +203,17 @@ const rightColumnPosts = allPostsByDate.filter((_, index) => index % 2 === 1);
 
 	.dark .tag-nav:hover,
 	[data-theme="dark"] .tag-nav:hover {
-		color: #22c55e;
+		color: hsl(var(--theme-accent));
 	}
 
 	.dark .tag-nav.active,
 	[data-theme="dark"] .tag-nav.active {
-		color: #22c55e;
+		color: hsl(var(--theme-accent));
 	}
 
 	.dark .tag-nav.active::after,
 	[data-theme="dark"] .tag-nav.active::after {
-		background-color: #22c55e;
+		background-color: hsl(var(--theme-accent));
 	}
 
 	.post-card-wrapper {
