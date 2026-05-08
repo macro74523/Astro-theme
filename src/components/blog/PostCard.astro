@@ -83,6 +83,13 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 		overflow: hidden;
 		position: relative;
 		flex-shrink: 0;
+		background: #1a1a1a;
+	}
+
+	@media (min-width: 768px) {
+		.card-cover {
+			aspect-ratio: 4 / 3;
+		}
 	}
 
 	.cover-img {
