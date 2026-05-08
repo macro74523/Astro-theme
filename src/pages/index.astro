@@ -298,8 +298,9 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 	}
 
 	.posts-grid-mobile {
-		columns: 2;
-		column-gap: 0.5rem;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.5rem;
 	}
 
 	.posts-column {
@@ -307,8 +308,8 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 	}
 
 	.post-card-wrapper {
-		break-inside: avoid;
 		margin-bottom: 0.5rem;
+		aspect-ratio: 3 / 4;
 	}
 
 	.posts-grid-desktop {
