@@ -4,10 +4,29 @@
 
 @layer base {
 	html {
+		font-size: 14px;
 		user-select: none;
 		-webkit-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
+	}
+
+	@media (min-width: 768px) {
+		html {
+			font-size: 16px;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		html {
+			font-size: 17px;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		html {
+			font-size: 18px;
+		}
 	}
 
 	:root,

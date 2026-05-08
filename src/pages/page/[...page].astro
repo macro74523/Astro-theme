@@ -13,7 +13,9 @@ const MAX_POSTS_PER_PAGE = 12;
 export const getStaticPaths = (async ({ paginate }) => {
 	const MAX_POSTS_PER_PAGE = 12;
 	const allPosts = await getAllPosts();
-	const filteredPosts = allPosts.filter((p) => !p.data.draft && !(p.data.tags || []).includes("示例"));
+	const filteredPosts = allPosts.filter(
+		(p) => !p.data.draft && !(p.data.tags || []).includes("示例"),
+	);
 	console.log(`Total posts: ${allPosts.length}, Filtered posts: ${filteredPosts.length}`);
 	return paginate(filteredPosts.sort(collectionDateSort), {
 		pageSize: MAX_POSTS_PER_PAGE,

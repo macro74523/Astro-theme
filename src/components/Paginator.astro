@@ -6,13 +6,14 @@ interface Props {
 	prevUrl?: PaginationLink;
 	currentPage?: number;
 	totalPages?: number;
+	pageBase?: string;
 }
 
-const { nextUrl, prevUrl, currentPage = 1, totalPages = 1 } = Astro.props;
+const { nextUrl, prevUrl, currentPage = 1, totalPages = 1, pageBase = "/" } = Astro.props;
 
 const getPageUrl = (pageNum: number) => {
-	if (pageNum === 1) return "/";
-	return `/page/${pageNum}/`;
+	if (pageNum === 1) return pageBase === "/" ? "/" : `${pageBase}`;
+	return `${pageBase}/${pageNum}/`;
 };
 
 const showEllipsis = totalPages > 7;

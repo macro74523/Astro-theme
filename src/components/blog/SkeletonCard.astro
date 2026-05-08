@@ -3,16 +3,18 @@ const { count = 8 } = Astro.props;
 ---
 
 <div class="skeleton-grid">
-	{Array.from({ length: count }).map((_, index) => (
-		<div class="skeleton-card" style={`animation-delay: ${index * 50}ms`}>
-			<div class="skeleton-cover" />
-			<div class="skeleton-content">
-				<div class="skeleton-title" />
-				<div class="skeleton-desc" />
-				<div class="skeleton-desc short" />
+	{
+		Array.from({ length: count }).map((_, index) => (
+			<div class="skeleton-card" style={`animation-delay: ${index * 50}ms`}>
+				<div class="skeleton-cover" />
+				<div class="skeleton-content">
+					<div class="skeleton-title" />
+					<div class="skeleton-desc" />
+					<div class="skeleton-desc short" />
+				</div>
 			</div>
-		</div>
-	))}
+		))
+	}
 </div>
 
 <style>

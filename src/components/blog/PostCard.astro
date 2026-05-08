@@ -79,7 +79,7 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 	}
 
 	.card-cover {
-		aspect-ratio: 4 / 3;
+		aspect-ratio: 3 / 4;
 		overflow: hidden;
 		position: relative;
 		flex-shrink: 0;
@@ -127,11 +127,16 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 	.post-card-no-cover {
 		display: flex;
 		flex-direction: column;
+		aspect-ratio: 4 / 3;
 	}
 
 	@media (min-width: 768px) {
 		.card-cover {
-			aspect-ratio: 3 / 4;
+			aspect-ratio: 4 / 3;
+		}
+
+		.post-card-no-cover {
+			aspect-ratio: 4 / 3;
 		}
 	}
 </style>

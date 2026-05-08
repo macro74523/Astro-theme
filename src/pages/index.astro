@@ -3,7 +3,7 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import PostCard from "@/components/blog/PostCard.astro";
 import SkeletonCard from "@/components/blog/SkeletonCard.astro";
 import Note from "@/components/note/Note.astro";
-import UpdateCalendar from "@/components/UpdateCalendar.astro";
+
 import Pagination from "@/components/Paginator.astro";
 import { getAllPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
@@ -150,8 +150,6 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			</section>
 		)
 	}
-
-	<UpdateCalendar />
 </PageLayout>
 
 <style>
@@ -300,10 +298,8 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 	}
 
 	.posts-grid-mobile {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 0.5rem;
-		grid-auto-rows: 1fr;
+		columns: 2;
+		column-gap: 0.5rem;
 	}
 
 	.posts-column {
@@ -311,8 +307,8 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 	}
 
 	.post-card-wrapper {
-		display: flex;
-		flex-direction: column;
+		break-inside: avoid;
+		margin-bottom: 0.5rem;
 	}
 
 	.posts-grid-desktop {
@@ -328,7 +324,10 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			display: grid;
 			gap: 0.5rem;
 			grid-template-columns: repeat(3, 1fr);
-			grid-auto-rows: 1fr;
+		}
+
+		.post-card-wrapper {
+			aspect-ratio: 4 / 3;
 		}
 	}
 

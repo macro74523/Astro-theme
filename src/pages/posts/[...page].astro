@@ -1,32 +1,32 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import Pagination from "@/components/Paginator.astro";
 import PostPreview from "@/components/blog/PostPreview.astro";
+import UpdateCalendar from "@/components/UpdateCalendar.astro";
 import { getAllPosts, getUniqueTags, groupPostsByYear } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import { collectionDateSort } from "@/utils/date";
-import type { GetStaticPaths, Page } from "astro";
+import type { GetStaticPaths } from "astro";
 import { Icon } from "astro-icon/components";
 export const prerender = true;
 
-export const getStaticPaths = (async ({ paginate }) => {
-	// 修改：每页显示文章数，最多标签数
-	const MAX_POSTS_PER_PAGE = 12;
+export const getStaticPaths = (async () => {
 	const MAX_TAGS = 7;
 	const allPosts = await getAllPosts();
 	const uniqueTags = getUniqueTags(allPosts).slice(0, MAX_TAGS);
-	return paginate(allPosts.sort(collectionDateSort), {
-		pageSize: MAX_POSTS_PER_PAGE,
-		props: { uniqueTags },
-	});
+	return [
+		{
+			params: { page: undefined },
+			props: { posts: allPosts.sort(collectionDateSort), uniqueTags },
+		},
+	];
 }) satisfies GetStaticPaths;
 
 interface Props {
-	page: Page<CollectionEntry<"post">>;
+	posts: CollectionEntry<"post">[];
 	uniqueTags: string[];
 }
 
-const { page, uniqueTags } = Astro.props;
+const { posts, uniqueTags } = Astro.props;
 
 const meta = {
 	description: "点点滴滴，江河湖海",
@@ -34,23 +34,7 @@ const meta = {
 	title: "博客",
 };
 
-const paginationProps = {
-	...(page.url.prev && {
-		prevUrl: {
-			text: "上一页",
-			url: page.url.prev,
-		},
-	}),
-	...(page.url.next && {
-		nextUrl: {
-			text: "下一页",
-			url: page.url.next,
-			className: "font-bold text-blue-500 text-lg",
-		},
-	}),
-};
-
-const groupedByYear = groupPostsByYear(page.data);
+const groupedByYear = groupPostsByYear(posts);
 const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 ---
 
@@ -70,7 +54,7 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 						<>
 							{/* 修改：注释博客按年分类 */}
 							{/* <h2 class="title text-lg">{yearKey}</h2> */}
-							<ul class="mb-16 mt-2 space-y-4 text-start">
+							<ul class="mb-8 mt-2 space-y-4 text-start">
 								{groupedByYear[yearKey]?.map((p) => (
 									<li class="grid gap-2 sm:grid-cols-[auto_1fr] sm:[&_q]:col-start-2">
 										<PostPreview post={p} />
@@ -80,7 +64,6 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 						</>
 					))
 				}
-				<Pagination {...paginationProps} />
 			</section>
 			{
 				!!uniqueTags.length && (
@@ -127,6 +110,9 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
 								其他 →
 							</a>
 						</span>
+						<div class="mt-8">
+							<UpdateCalendar />
+						</div>
 					</aside>
 				)
 			}
