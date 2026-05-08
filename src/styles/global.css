@@ -11,8 +11,10 @@
 		-ms-user-select: none;
 		min-height: 100vh;
 		height: 100%;
-		overscroll-behavior: none;
+		overscroll-behavior-y: none;
+		overscroll-behavior-x: none;
 		-webkit-overflow-scrolling: touch;
+		touch-action: pan-y pinch-zoom;
 	}
 
 	body {
@@ -20,6 +22,14 @@
 		height: 100%;
 		margin: 0;
 		padding: 0;
+		overscroll-behavior-y: none;
+		overscroll-behavior-x: none;
+	}
+
+	#main {
+		overflow-y: auto;
+		overflow-x: hidden;
+		overscroll-behavior-y: contain;
 	}
 
 	@media (min-width: 768px) {
