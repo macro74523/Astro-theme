@@ -9,6 +9,17 @@
 		-webkit-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
+		min-height: 100vh;
+		height: 100%;
+		overscroll-behavior: none;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	body {
+		min-height: 100vh;
+		height: 100%;
+		margin: 0;
+		padding: 0;
 	}
 
 	@media (min-width: 768px) {
