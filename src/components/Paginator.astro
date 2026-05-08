@@ -14,41 +14,90 @@ const getPageUrl = (pageNum: number) => {
 	if (pageNum === 1) return "/";
 	return `/page/${pageNum}/`;
 };
+
+const showEllipsis = totalPages > 7;
+const getVisiblePages = () => {
+	if (!showEllipsis) {
+		return Array.from({ length: totalPages }, (_, i) => i + 1);
+	}
+
+	const pages: (number | string)[] = [];
+	pages.push(1);
+
+	if (currentPage > 3) {
+		pages.push("...");
+	}
+
+	const start = Math.max(2, currentPage - 1);
+	const end = Math.min(totalPages - 1, currentPage + 1);
+
+	for (let i = start; i <= end; i++) {
+		if (!pages.includes(i)) {
+			pages.push(i);
+		}
+	}
+
+	if (currentPage < totalPages - 2) {
+		pages.push("...");
+	}
+
+	if (!pages.includes(totalPages)) {
+		pages.push(totalPages);
+	}
+
+	return pages;
+};
+
+const visiblePages = getVisiblePages();
 ---
 
 {
 	(prevUrl || nextUrl || totalPages > 1) && (
-		<nav class="mt-8 flex items-center justify-center gap-2 font-bold">
-			{prevUrl && (
-				<a
-					class="rounded-lg px-4 py-2 text-accent transition-colors hover:bg-accent/10"
-					data-astro-prefetch
-					href={prevUrl.url}
-				>
-					←
-				</a>
-			)}
-			{Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-				<a
-					key={page}
-					class={`rounded-lg px-4 py-2 transition-colors ${
-						page === currentPage ? "bg-accent text-white" : "text-accent hover:bg-accent/10"
-					}`}
-					data-astro-prefetch
-					href={getPageUrl(page)}
-				>
-					{page}
-				</a>
-			))}
-			{nextUrl && (
-				<a
-					class="rounded-lg px-4 py-2 text-accent transition-colors hover:bg-accent/10"
-					data-astro-prefetch
-					href={nextUrl.url}
-				>
-					→
-				</a>
-			)}
+		<nav class="mt-8 flex flex-col items-center gap-4 font-bold sm:flex-row sm:justify-center">
+			<div class="flex items-center gap-2">
+				{prevUrl && (
+					<a
+						class="flex items-center gap-1 rounded-lg px-4 py-2 text-accent transition-all hover:scale-105 hover:bg-accent/10"
+						data-astro-prefetch
+						href={prevUrl.url}
+					>
+						<span class="text-lg">←</span>
+						<span class="hidden sm:inline">上一页</span>
+					</a>
+				)}
+				<div class="flex items-center gap-1">
+					{visiblePages.map((page) =>
+						page === "..." ? (
+							<span class="px-2 py-2 text-accent/50">...</span>
+						) : (
+							<a
+								class={`min-w-[40px] rounded-lg px-3 py-2 text-center transition-all ${
+									page === currentPage
+										? "bg-accent text-white shadow-lg shadow-accent/30"
+										: "text-accent hover:scale-105 hover:bg-accent/10"
+								}`}
+								data-astro-prefetch
+								href={getPageUrl(page as number)}
+							>
+								{page}
+							</a>
+						),
+					)}
+				</div>
+				{nextUrl && (
+					<a
+						class="flex items-center gap-1 rounded-lg px-4 py-2 text-accent transition-all hover:scale-105 hover:bg-accent/10"
+						data-astro-prefetch
+						href={nextUrl.url}
+					>
+						<span class="hidden sm:inline">下一页</span>
+						<span class="text-lg">→</span>
+					</a>
+				)}
+			</div>
+			<div class="text-sm text-accent/60">
+				第 <span class="font-semibold text-accent">{currentPage}</span> / {totalPages} 页
+			</div>
 		</nav>
 	)
 }

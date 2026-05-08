@@ -56,93 +56,117 @@ function getLevel(date: string): number {
 }
 
 const levelColors = [
-	"bg-gray-100 dark:bg-gray-700",
-	"bg-[#9BE9A8]",
-	"bg-[#40C463]",
-	"bg-[#30A14E]",
-	"bg-[#216E39]",
+	"bg-[hsl(var(--theme-accent)/0.1)] dark:bg-[hsl(var(--theme-accent)/0.15)]",
+	"bg-[hsl(var(--theme-accent)/0.25)]",
+	"bg-[hsl(var(--theme-accent)/0.45)]",
+	"bg-[hsl(var(--theme-accent)/0.65)]",
+	"bg-[hsl(var(--theme-accent)/0.9)]",
 ];
+
+const totalContributions = allDates.length;
+const contributionDays = new Set(allDates).size;
 ---
 
-<section class="update-calendar-section mt-12">
-	<div class="section-header">
+<section class="update-calendar-section">
+	<div class="calendar-card">
 		<div class="calendar-header">
-			<div class="date-badge">
-				{today.getFullYear()}年{today.getMonth() + 1}月{today.getDate()}日
+			<div class="header-left">
+				<div class="title-group">
+					<span class="title-main">Daily</span>
+					<span class="title-sub">Log</span>
+				</div>
+				<div class="stats-group">
+					<span class="stat-item">
+						<span class="stat-value">{totalContributions}</span>
+						<span class="stat-label">次更新</span>
+					</span>
+					<span class="stat-divider">·</span>
+					<span class="stat-item">
+						<span class="stat-value">{contributionDays}</span>
+						<span class="stat-label">天</span>
+					</span>
+				</div>
 			</div>
-			<div class="calendar-title">
-				<span class="title-main">Daily</span>
-				<span class="title-sub">Log</span>
+			<div class="header-right">
+				<div class="date-badge">
+					<svg class="date-icon" viewBox="0 0 20 20" fill="currentColor">
+						<path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+					</svg>
+					{today.getFullYear()}.{today.getMonth() + 1}.{today.getDate()}
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="calendar-container">
-		<div class="weekday-labels">
-			<span class="weekday">一</span>
-			<span class="weekday">三</span>
-			<span class="weekday">五</span>
-			<span class="weekday">日</span>
-		</div>
+		<div class="calendar-container">
+			<div class="weekday-labels">
+				<span class="weekday">Mon</span>
+				<span class="weekday">Wed</span>
+				<span class="weekday">Fri</span>
+			</div>
 
-		<div class="calendar-grid">
-			{
-				weeks.map((week, weekIndex) => (
-					<div key={weekIndex} class="calendar-week">
-						{week.map((date, dayIndex) => {
-							const level = getLevel(date);
-							return (
-								<div
-									key={dayIndex}
-									class={`calendar-cell ${levelColors[level]} cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-accent`}
-									title={date ? `${date}: ${dateCount.get(date) || 0} 次更新` : ""}
-								/>
-							);
-						})}
-					</div>
-				))
-			}
-		</div>
-
-		<div class="month-labels">
-			{
-				(() => {
-					const monthLabels: { month: string; offset: number }[] = [];
-					let lastMonth = -1;
-					let weekCount = 0;
-					for (const week of weeks) {
-						for (const date of week) {
-							if (date) {
-								const month = new Date(date).getMonth();
-								if (month !== lastMonth) {
-									monthLabels.push({ month: months[month], offset: weekCount });
-									lastMonth = month;
-								}
-								break;
-							}
-						}
-						weekCount++;
+			<div class="calendar-grid-wrapper">
+				<div class="calendar-grid">
+					{
+						weeks.map((week, weekIndex) => (
+							<div key={weekIndex} class="calendar-week">
+								{week.map((date, dayIndex) => {
+									const level = getLevel(date);
+									const isToday = date === today.toISOString().split("T")[0];
+									return (
+										<div
+											class={`calendar-cell ${levelColors[level]} ${isToday ? 'ring-2 ring-[hsl(var(--theme-accent))] ring-offset-1' : ''} cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-[hsl(var(--theme-accent))] hover:scale-125`}
+											title={date ? `${date}: ${dateCount.get(date) || 0} 次更新` : ""}
+										/>
+									);
+								})}
+							</div>
+						))
 					}
-					return monthLabels.map((label, index) => (
-						<span key={index} class="month-label" style={{ left: `${label.offset * 14 + 7}px` }}>
-							{label.month}
-						</span>
-					));
-				})()
-			}
-		</div>
-	</div>
+				</div>
 
-	<div class="calendar-legend">
-		<span class="legend-label">少</span>
-		<div class="legend-cells">
-			<div class={`legend-cell ${levelColors[0]}`}></div>
-			<div class={`legend-cell ${levelColors[1]}`}></div>
-			<div class={`legend-cell ${levelColors[2]}`}></div>
-			<div class={`legend-cell ${levelColors[3]}`}></div>
-			<div class={`legend-cell ${levelColors[4]}`}></div>
+				<div class="month-labels">
+					{
+						(() => {
+							const monthLabels: { month: string; offset: number }[] = [];
+							let lastMonth = -1;
+							let weekCount = 0;
+							for (const week of weeks) {
+								for (const date of week) {
+									if (date) {
+										const month = new Date(date).getMonth();
+										if (month !== lastMonth) {
+											monthLabels.push({ month: months[month], offset: weekCount });
+											lastMonth = month;
+										}
+										break;
+									}
+								}
+								weekCount++;
+							}
+							return monthLabels.map((label, index) => (
+								<span key={index} class="month-label" style={{ left: `${label.offset * 14 + 7}px` }}>
+									{label.month}
+								</span>
+							));
+						})()
+					}
+				</div>
+			</div>
 		</div>
-		<span class="legend-label">多</span>
+
+		<div class="calendar-footer">
+			<div class="calendar-legend">
+				<span class="legend-label text-[hsl(var(--theme-accent)/0.6)]">少</span>
+				<div class="legend-cells">
+					<div class={`legend-cell ${levelColors[0]}`}></div>
+					<div class={`legend-cell ${levelColors[1]}`}></div>
+					<div class={`legend-cell ${levelColors[2]}`}></div>
+					<div class={`legend-cell ${levelColors[3]}`}></div>
+					<div class={`legend-cell ${levelColors[4]}`}></div>
+				</div>
+				<span class="legend-label text-[hsl(var(--theme-accent)/0.6)]">多</span>
+			</div>
+		</div>
 	</div>
 </section>
 
@@ -152,62 +176,112 @@ const levelColors = [
 		padding-bottom: 3rem;
 	}
 
+	.calendar-card {
+		background: hsl(var(--theme-bg) / 0.5);
+		border: 1px solid hsl(var(--theme-accent) / 0.15);
+		border-radius: 1rem;
+		padding: 1.5rem;
+		backdrop-filter: blur(8px);
+		transition: all 0.3s ease;
+	}
+
+	.dark .calendar-card {
+		background: hsl(var(--theme-bg) / 0.3);
+		border-color: hsl(var(--theme-accent) / 0.2);
+	}
+
+	.calendar-card:hover {
+		border-color: hsl(var(--theme-accent) / 0.3);
+		box-shadow: 0 4px 20px hsl(var(--theme-accent) / 0.1);
+	}
+
 	.calendar-header {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-between;
 		margin-bottom: 1.5rem;
 		flex-wrap: wrap;
 		gap: 1rem;
-		max-width: 1200px;
-		margin-left: auto;
-		margin-right: auto;
-		padding-left: 1rem;
-		padding-right: 1rem;
 	}
 
-	.date-badge {
-		padding: 0.5rem 1rem;
-		font-size: 0.875rem;
-		color: #6b7280;
-	}
-
-	.dark .date-badge {
-		color: #9ca3af;
-	}
-
-	.calendar-title {
+	.header-left {
 		display: flex;
 		flex-direction: column;
-		align-items: flex-end;
+		gap: 0.5rem;
+	}
+
+	.title-group {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
 	}
 
 	.title-main {
-		font-size: 1.75rem;
+		font-size: 1.5rem;
 		font-weight: 700;
-		color: #111827;
+		color: hsl(var(--theme-accent-2));
+		letter-spacing: -0.02em;
 	}
 
 	.title-sub {
 		font-size: 1rem;
 		font-weight: 600;
 		color: hsl(var(--theme-accent));
-		margin-top: -0.25rem;
 	}
 
-	.dark .title-main {
-		color: #ffffff;
+	.stats-group {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.875rem;
+		color: hsl(var(--theme-accent) / 0.7);
+	}
+
+	.stat-item {
+		display: flex;
+		align-items: baseline;
+		gap: 0.25rem;
+	}
+
+	.stat-value {
+		font-weight: 700;
+		font-size: 1rem;
+		color: hsl(var(--theme-accent));
+	}
+
+	.stat-label {
+		font-weight: 500;
+	}
+
+	.stat-divider {
+		color: hsl(var(--theme-accent) / 0.4);
+	}
+
+	.header-right {
+		display: flex;
+		align-items: center;
+	}
+
+	.date-badge {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 0.75rem;
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: hsl(var(--theme-accent) / 0.8);
+		background: hsl(var(--theme-accent) / 0.08);
+		border-radius: 0.5rem;
+		border: 1px solid hsl(var(--theme-accent) / 0.15);
+	}
+
+	.date-icon {
+		width: 1rem;
+		height: 1rem;
 	}
 
 	.calendar-container {
 		position: relative;
-		overflow-x: auto;
-		padding-bottom: 1rem;
-		max-width: 1200px;
-		margin-left: auto;
-		margin-right: auto;
-		padding-left: 1rem;
-		padding-right: 1rem;
 	}
 
 	.weekday-labels {
@@ -218,75 +292,142 @@ const levelColors = [
 	}
 
 	.weekday {
-		font-size: 0.75rem;
-		color: #9ca3af;
+		font-size: 0.7rem;
+		font-weight: 500;
+		color: hsl(var(--theme-accent) / 0.5);
 		width: 12px;
 		text-align: center;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	@media (min-width: 768px) {
+		.weekday {
+			width: 14px;
+			font-size: 0.75rem;
+		}
+	}
+
+	.calendar-grid-wrapper {
+		position: relative;
+		overflow-x: auto;
+		padding-bottom: 0.5rem;
+		direction: rtl;
+	}
+
+	.calendar-grid-wrapper::-webkit-scrollbar {
+		display: none;
 	}
 
 	.calendar-grid {
 		display: flex;
 		gap: 2px;
+		min-width: max-content;
+		width: 100%;
+		direction: ltr;
+	}
+
+	.month-labels {
+		direction: rtl;
+	}
+
+	.month-label {
+		direction: ltr;
 	}
 
 	.calendar-week {
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
+		flex: 1;
+		min-width: 12px;
 	}
 
 	.calendar-cell {
 		width: 12px;
 		height: 12px;
-		border-radius: 2px;
+		border-radius: 3px;
+		transition: all 0.2s ease;
+	}
+
+	@media (min-width: 768px) {
+		.calendar-grid-wrapper {
+			overflow-x: visible;
+		}
+
+		.calendar-grid {
+			min-width: 100%;
+			max-width: 100%;
+		}
+
+		.calendar-week {
+			min-width: 0;
+		}
+
+		.calendar-cell {
+			width: 100%;
+			min-width: 12px;
+			max-width: 24px;
+			height: auto;
+			aspect-ratio: 1;
+			border-radius: 4px;
+		}
 	}
 
 	.month-labels {
 		position: relative;
-		height: 1rem;
+		height: 1.25rem;
 		margin-top: 0.5rem;
+		min-width: max-content;
 	}
 
 	.month-label {
 		position: absolute;
-		font-size: 0.75rem;
-		color: #9ca3af;
+		font-size: 0.7rem;
+		font-weight: 500;
+		color: hsl(var(--theme-accent) / 0.5);
 		transform: translateX(-50%);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.calendar-footer {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid hsl(var(--theme-accent) / 0.1);
 	}
 
 	.calendar-legend {
 		display: flex;
 		align-items: center;
-		justify-content: flex-end;
 		gap: 0.5rem;
-		margin-top: 1rem;
 	}
 
 	.legend-label {
 		font-size: 0.75rem;
-		color: #9ca3af;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
 	}
 
 	.legend-cells {
 		display: flex;
-		gap: 2px;
+		gap: 3px;
 	}
 
 	.legend-cell {
 		width: 12px;
 		height: 12px;
-		border-radius: 2px;
+		border-radius: 3px;
 	}
 
 	@media (min-width: 768px) {
-		.calendar-cell {
-			width: 14px;
-			height: 14px;
-		}
-
 		.legend-cell {
 			width: 14px;
 			height: 14px;
+			border-radius: 4px;
 		}
 	}
 </style>

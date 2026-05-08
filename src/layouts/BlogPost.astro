@@ -91,4 +91,43 @@ const hasHeadings = headings.length > 0;
 	.no-toc-max {
 		max-width: none !important;
 	}
+
+	iframe[src*="bilibili.com"] {
+		display: block;
+		width: 100%;
+		min-height: 300px;
+		border-radius: 0.5rem;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+	}
+
+	.video-wrap {
+		position: relative;
+		width: 100%;
+		height: 0;
+		padding-bottom: 56.25%;
+		margin: 1.5rem 0;
+		border-radius: 0.5rem;
+		overflow: hidden;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+	}
+
+	.video-wrap iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+
+	@media (max-width: 768px) {
+		iframe[src*="bilibili.com"] {
+			min-height: 220px;
+		}
+
+		.video-wrap {
+			border-radius: 0.25rem;
+			margin: 1rem 0;
+		}
+	}
 </style>

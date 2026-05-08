@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
 import PostCard from "@/components/blog/PostCard.astro";
+import SkeletonCard from "@/components/blog/SkeletonCard.astro";
 import Note from "@/components/note/Note.astro";
 import UpdateCalendar from "@/components/UpdateCalendar.astro";
 import Pagination from "@/components/Paginator.astro";
@@ -64,8 +65,12 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 		<div class="posts-grid-mobile" id="postsGridMobile">
 			<div class="posts-column">
 				{
-					leftColumnPosts.map((p) => (
-						<div class="post-card-wrapper" data-tags={JSON.stringify(p.data.tags || [])}>
+					leftColumnPosts.map((p, index) => (
+						<div
+							class="post-card-wrapper fade-in-item"
+							data-tags={JSON.stringify(p.data.tags || [])}
+							style={`animation-delay: ${index * 50}ms`}
+						>
 							<PostCard post={p} />
 						</div>
 					))
@@ -73,8 +78,12 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			</div>
 			<div class="posts-column">
 				{
-					rightColumnPosts.map((p) => (
-						<div class="post-card-wrapper" data-tags={JSON.stringify(p.data.tags || [])}>
+					rightColumnPosts.map((p, index) => (
+						<div
+							class="post-card-wrapper fade-in-item"
+							data-tags={JSON.stringify(p.data.tags || [])}
+							style={`animation-delay: ${(leftColumnPosts.length + index) * 50}ms`}
+						>
 							<PostCard post={p} />
 						</div>
 					))
@@ -84,8 +93,12 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 
 		<div class="posts-grid-desktop" id="postsGridDesktop">
 			{
-				allPostsByDate.map((p) => (
-					<div class="post-card-wrapper" data-tags={JSON.stringify(p.data.tags || [])}>
+				allPostsByDate.map((p, index) => (
+					<div
+						class="post-card-wrapper fade-in-item"
+						data-tags={JSON.stringify(p.data.tags || [])}
+						style={`animation-delay: ${index * 50}ms`}
+					>
 						<PostCard post={p} />
 					</div>
 				))
@@ -174,25 +187,48 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 
 	.tags-nav {
 		display: flex;
-		gap: 1.5rem;
+		gap: 1rem;
 		align-items: center;
 		justify-content: flex-start;
 		flex-wrap: wrap;
-		margin-bottom: 2rem;
+		margin-bottom: 1.5rem;
+		padding: 0.5rem 0;
 	}
 
 	.tag-nav {
-		font-size: 1.125rem;
+		font-size: 0.9375rem;
 		font-weight: 500;
 		color: #9ca3af;
 		text-decoration: none;
 		position: relative;
 		transition: color 0.2s ease;
-		padding-bottom: 0.25rem;
+		padding: 0.375rem 0.75rem;
 		background: none;
 		border: none;
 		cursor: pointer;
-		padding: 0.25rem 0;
+		border-radius: 0.5rem;
+		white-space: nowrap;
+	}
+
+	.tag-nav:hover {
+		background: hsl(var(--theme-accent) / 0.1);
+	}
+
+	@media (min-width: 768px) {
+		.tags-nav {
+			gap: 1.5rem;
+			margin-bottom: 2rem;
+		}
+
+		.tag-nav {
+			font-size: 1.125rem;
+			padding: 0.25rem 0;
+			border-radius: 0;
+		}
+
+		.tag-nav:hover {
+			background: none;
+		}
 	}
 
 	.tag-nav:hover {
@@ -243,20 +279,40 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 		display: none;
 	}
 
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.fade-in-item {
+		opacity: 0;
+		animation: fadeInUp 0.5s ease-out forwards;
+	}
+
 	.posts-section {
 		margin-bottom: 3rem;
 	}
 
 	.posts-grid-mobile {
-		display: flex;
-		gap: 0.375rem;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.5rem;
+		grid-auto-rows: 1fr;
 	}
 
 	.posts-column {
+		display: contents;
+	}
+
+	.post-card-wrapper {
 		display: flex;
 		flex-direction: column;
-		gap: 0.375rem;
-		flex: 1;
 	}
 
 	.posts-grid-desktop {
@@ -272,6 +328,7 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			display: grid;
 			gap: 0.5rem;
 			grid-template-columns: repeat(3, 1fr);
+			grid-auto-rows: 1fr;
 		}
 	}
 

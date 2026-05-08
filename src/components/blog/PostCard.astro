@@ -20,7 +20,7 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 
 <article
 	class:list={[
-		"group relative flex flex-col overflow-hidden rounded border border-accent/20 bg-bgColor transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/10 dark:border-accent-2/20 dark:bg-accent-2/5 dark:hover:border-accent-2/40 dark:hover:shadow-accent-2/10",
+		"animate-fade-in group relative flex flex-col overflow-hidden rounded border border-accent/20 bg-bgColor transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/10 dark:border-accent-2/20 dark:bg-accent-2/5 dark:hover:border-accent-2/40 dark:hover:shadow-accent-2/10",
 		!hasCover && "post-card-no-cover",
 	]}
 	style="break-inside: avoid;"
@@ -63,10 +63,26 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 </article>
 
 <style>
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.animate-fade-in {
+		animation: fadeInUp 0.5s ease-out forwards;
+	}
+
 	.card-cover {
-		aspect-ratio: 3 / 4;
+		aspect-ratio: 4 / 3;
 		overflow: hidden;
 		position: relative;
+		flex-shrink: 0;
 	}
 
 	.cover-img {
@@ -104,9 +120,18 @@ const hasCover = hasExternalImage(ogImage) || !!coverSrc;
 		border-radius: 4px;
 	}
 
+	article {
+		height: 100%;
+	}
+
+	.post-card-no-cover {
+		display: flex;
+		flex-direction: column;
+	}
+
 	@media (min-width: 768px) {
-		.post-card-no-cover {
-			height: 450px !important;
+		.card-cover {
+			aspect-ratio: 3 / 4;
 		}
 	}
 </style>

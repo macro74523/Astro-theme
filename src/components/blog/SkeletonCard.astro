@@ -1,0 +1,148 @@
+---
+const { count = 8 } = Astro.props;
+---
+
+<div class="skeleton-grid">
+	{Array.from({ length: count }).map((_, index) => (
+		<div class="skeleton-card" style={`animation-delay: ${index * 50}ms`}>
+			<div class="skeleton-cover" />
+			<div class="skeleton-content">
+				<div class="skeleton-title" />
+				<div class="skeleton-desc" />
+				<div class="skeleton-desc short" />
+			</div>
+		</div>
+	))}
+</div>
+
+<style>
+	.skeleton-grid {
+		display: grid;
+		gap: 0.5rem;
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media (min-width: 768px) {
+		.skeleton-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.skeleton-grid {
+			grid-template-columns: repeat(4, 1fr);
+			gap: 0.75rem;
+		}
+	}
+
+	.skeleton-card {
+		overflow: hidden;
+		border-radius: 0.5rem;
+		border: 1px solid hsl(var(--theme-accent) / 0.1);
+		background: hsl(var(--theme-bg) / 0.5);
+		animation: fadeInUp 0.6s ease-out forwards;
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	@keyframes fadeInUp {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.dark .skeleton-card {
+		background: hsl(var(--theme-bg) / 0.3);
+	}
+
+	.skeleton-cover {
+		aspect-ratio: 3 / 4;
+		background: linear-gradient(
+			90deg,
+			hsl(var(--theme-accent) / 0.05) 0%,
+			hsl(var(--theme-accent) / 0.1) 50%,
+			hsl(var(--theme-accent) / 0.05) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+	}
+
+	.dark .skeleton-cover {
+		background: linear-gradient(
+			90deg,
+			hsl(var(--theme-accent) / 0.1) 0%,
+			hsl(var(--theme-accent) / 0.15) 50%,
+			hsl(var(--theme-accent) / 0.1) 100%
+		);
+		background-size: 200% 100%;
+	}
+
+	@keyframes shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
+	}
+
+	.skeleton-content {
+		padding: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.skeleton-title {
+		height: 1.25rem;
+		width: 80%;
+		border-radius: 0.25rem;
+		background: linear-gradient(
+			90deg,
+			hsl(var(--theme-accent) / 0.08) 0%,
+			hsl(var(--theme-accent) / 0.12) 50%,
+			hsl(var(--theme-accent) / 0.08) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+	}
+
+	.dark .skeleton-title {
+		background: linear-gradient(
+			90deg,
+			hsl(var(--theme-accent) / 0.15) 0%,
+			hsl(var(--theme-accent) / 0.2) 50%,
+			hsl(var(--theme-accent) / 0.15) 100%
+		);
+		background-size: 200% 100%;
+	}
+
+	.skeleton-desc {
+		height: 0.875rem;
+		width: 100%;
+		border-radius: 0.25rem;
+		background: linear-gradient(
+			90deg,
+			hsl(var(--theme-accent) / 0.05) 0%,
+			hsl(var(--theme-accent) / 0.08) 50%,
+			hsl(var(--theme-accent) / 0.05) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+	}
+
+	.skeleton-desc.short {
+		width: 60%;
+	}
+
+	.dark .skeleton-desc {
+		background: linear-gradient(
+			90deg,
+			hsl(var(--theme-accent) / 0.1) 0%,
+			hsl(var(--theme-accent) / 0.15) 50%,
+			hsl(var(--theme-accent) / 0.1) 100%
+		);
+		background-size: 200% 100%;
+	}
+</style>
