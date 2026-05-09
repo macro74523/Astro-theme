@@ -3,6 +3,7 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import PostCard from "@/components/blog/PostCard.astro";
 import SkeletonCard from "@/components/blog/SkeletonCard.astro";
 import Note from "@/components/note/Note.astro";
+import MusicPlayer from "@/components/MusicPlayer.astro";
 
 import Pagination from "@/components/Paginator.astro";
 import { getAllPosts } from "@/data/post";
@@ -56,7 +57,7 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 						<p class="intro-title">摄像师 / 内容创作者</p>
 						<p class="intro-description">
 							通过电信号把拍摄物体记录下来成像<br />
-							热爱技术，拥抱Ai、热衷于内容创作。
+							Nothing is true, everything is permitted
 						</p>
 					</div>
 				</div>
@@ -763,4 +764,6 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			}
 		});
 	</script>
+
+	<MusicPlayer />
 </PageLayout>

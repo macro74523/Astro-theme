@@ -1,0 +1,433 @@
+---
+---
+
+<div class="music-player-container" id="musicPlayer">
+	<button class="music-toggle-btn" id="musicToggle">
+		<div class="music-icon-wrapper">
+			<div class="music-bars paused">
+				<span class="bar"></span>
+				<span class="bar"></span>
+				<span class="bar"></span>
+				<span class="bar"></span>
+			</div>
+		</div>
+	</button>
+
+	<div class="music-panel" id="musicPanel">
+		<div class="music-header">
+			<h3 class="music-title">🎵 背景音乐</h3>
+		</div>
+		<div class="music-track-info">
+			<p class="track-name" id="trackName">Daybreak</p>
+		</div>
+		<div class="music-controls">
+			<button class="control-btn prev-btn" id="prevBtn">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<polygon points="19 20 9 12 19 4 19 20"></polygon>
+					<line x1="5" y1="19" x2="5" y2="5"></line>
+				</svg>
+			</button>
+			<button class="control-btn play-btn" id="playBtn">
+				<svg class="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<polygon points="5 3 19 12 5 21 5 3"></polygon>
+				</svg>
+				<svg class="pause-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+					<rect x="6" y="4" width="4" height="16"></rect>
+					<rect x="14" y="4" width="4" height="16"></rect>
+				</svg>
+			</button>
+			<button class="control-btn next-btn" id="nextBtn">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<polygon points="5 4 15 12 5 20 5 4"></polygon>
+					<line x1="19" y1="5" x2="19" y2="19"></line>
+				</svg>
+			</button>
+		</div>
+		<div class="progress-container">
+			<div class="progress-bar" id="progressBar">
+				<div class="progress-fill" id="progressFill"></div>
+			</div>
+			<div class="time-display">
+				<span class="current-time" id="currentTime">0:00</span>
+				<span class="total-time" id="totalTime">0:00</span>
+			</div>
+		</div>
+		<div class="volume-container">
+			<svg class="volume-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+				<path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+				<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+			</svg>
+			<input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+		</div>
+	</div>
+
+	<audio id="audioPlayer" src="/music/Daybreak.mp3" preload="metadata" autoplay>
+	</audio>
+</div>
+
+<style>
+	.music-player-container {
+		position: fixed;
+		bottom: 24px;
+		right: 24px;
+		z-index: 9999;
+	}
+
+	.music-toggle-btn {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		background: hsl(var(--theme-accent) / 0.9);
+		border: none;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 4px 20px hsl(var(--theme-accent) / 0.35);
+		transition: all 0.3s ease;
+	}
+
+	.music-toggle-btn:hover {
+		transform: scale(1.08);
+		box-shadow: 0 6px 28px hsl(var(--theme-accent) / 0.45);
+	}
+
+	.music-icon-wrapper {
+		width: 24px;
+		height: 24px;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		gap: 2px;
+	}
+
+	.music-bars {
+		display: flex;
+		gap: 2px;
+		align-items: flex-end;
+		height: 18px;
+	}
+
+	.music-bars .bar {
+		width: 3px;
+		background: white;
+		border-radius: 2px;
+		animation: equalizer 0.8s ease-in-out infinite alternate;
+	}
+
+	.music-bars .bar:nth-child(1) {
+		height: 6px;
+		animation-delay: 0s;
+	}
+
+	.music-bars .bar:nth-child(2) {
+		height: 12px;
+		animation-delay: 0.15s;
+	}
+
+	.music-bars .bar:nth-child(3) {
+		height: 8px;
+		animation-delay: 0.3s;
+	}
+
+	.music-bars .bar:nth-child(4) {
+		height: 14px;
+		animation-delay: 0.45s;
+	}
+
+	.music-bars.paused .bar {
+		animation-play-state: paused;
+	}
+
+	@keyframes equalizer {
+		0% {
+			height: 4px;
+		}
+		100% {
+			height: 16px;
+		}
+	}
+
+	.music-panel {
+		position: absolute;
+		bottom: 65px;
+		right: 0;
+		width: 300px;
+		background: hsl(var(--theme-bg) / 0.95);
+		backdrop-filter: blur(16px);
+		border: 1px solid hsl(var(--theme-accent) / 0.18);
+		border-radius: 1rem;
+		padding: 1.25rem;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+		opacity: 0;
+		transform: translateY(12px) scale(0.95);
+		pointer-events: none;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.music-panel.show {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+		pointer-events: auto;
+	}
+
+	.music-header {
+		margin-bottom: 1rem;
+	}
+
+	.music-title {
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: hsl(var(--theme-accent-2));
+		margin: 0;
+	}
+
+	.music-track-info {
+		margin-bottom: 1rem;
+	}
+
+	.track-name {
+		font-size: 0.85rem;
+		color: hsl(var(--theme-accent) / 0.85);
+		margin: 0;
+		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.music-controls {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.control-btn {
+		width: 42px;
+		height: 42px;
+		border-radius: 50%;
+		background: hsl(var(--theme-accent) / 0.1);
+		border: none;
+		color: hsl(var(--theme-accent));
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s ease;
+	}
+
+	.control-btn:hover {
+		background: hsl(var(--theme-accent) / 0.2);
+		transform: scale(1.05);
+	}
+
+	.control-btn svg {
+		width: 20px;
+		height: 20px;
+	}
+
+	.play-btn {
+		width: 54px;
+		height: 54px;
+		background: hsl(var(--theme-accent));
+		color: white;
+		box-shadow: 0 4px 16px hsl(var(--theme-accent) / 0.3);
+	}
+
+	.play-btn:hover {
+		background: hsl(var(--theme-accent) / 0.9);
+	}
+
+	.play-btn svg {
+		width: 22px;
+		height: 22px;
+	}
+
+	.progress-container {
+		margin-bottom: 1rem;
+	}
+
+	.progress-bar {
+		width: 100%;
+		height: 6px;
+		background: hsl(var(--theme-accent) / 0.12);
+		border-radius: 3px;
+		cursor: pointer;
+		overflow: hidden;
+	}
+
+	.progress-fill {
+		height: 100%;
+		width: 0%;
+		background: hsl(var(--theme-accent));
+		border-radius: 3px;
+		transition: width 0.1s linear;
+	}
+
+	.time-display {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 0.4rem;
+		font-size: 0.75rem;
+		color: hsl(var(--theme-text), 0.5);
+	}
+
+	.volume-container {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.volume-icon {
+		width: 18px;
+		height: 18px;
+		color: hsl(var(--theme-accent) / 0.7);
+		flex-shrink: 0;
+	}
+
+	.volume-slider {
+		flex: 1;
+		height: 5px;
+		-webkit-appearance: none;
+		appearance: none;
+		background: hsl(var(--theme-accent) / 0.12);
+		border-radius: 3px;
+		outline: none;
+	}
+
+	.volume-slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		background: hsl(var(--theme-accent));
+		cursor: pointer;
+	}
+
+	@media (max-width: 767px) {
+		.music-toggle-btn {
+			width: 44px;
+			height: 44px;
+		}
+
+		.music-panel {
+			width: 270px;
+			right: -10px;
+			bottom: 58px;
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const audio = document.getElementById("audioPlayer");
+		const musicToggle = document.getElementById("musicToggle");
+		const musicPanel = document.getElementById("musicPanel");
+		const playBtn = document.getElementById("playBtn");
+		const prevBtn = document.getElementById("prevBtn");
+		const nextBtn = document.getElementById("nextBtn");
+		const progressBar = document.getElementById("progressBar");
+		const progressFill = document.getElementById("progressFill");
+		const currentTimeEl = document.getElementById("currentTime");
+		const totalTimeEl = document.getElementById("totalTime");
+		const volumeSlider = document.getElementById("volumeSlider");
+		const musicBars = document.querySelector(".music-bars");
+		const playIcon = document.querySelector(".play-icon");
+		const pauseIcon = document.querySelector(".pause-icon");
+
+		let isPanelOpen = false;
+
+		audio.volume = 0.7;
+
+		musicToggle.addEventListener("click", () => {
+			isPanelOpen = !isPanelOpen;
+			musicPanel.classList.toggle("show", isPanelOpen);
+		});
+
+		document.addEventListener("click", (e) => {
+			if (!e.target.closest(".music-player-container")) {
+				isPanelOpen = false;
+				musicPanel.classList.remove("show");
+			}
+		});
+
+		function formatTime(seconds) {
+			const mins = Math.floor(seconds / 60);
+			const secs = Math.floor(seconds % 60);
+			return `${mins}:${secs.toString().padStart(2, "0")}`;
+		}
+
+		function togglePlayPause() {
+			if (audio.paused) {
+				audio.play().catch(err => console.log("Play error:", err));
+			} else {
+				audio.pause();
+			}
+		}
+
+		function updatePlayState() {
+			const isPlaying = !audio.paused;
+			if (isPlaying) {
+				playIcon.style.display = "none";
+				pauseIcon.style.display = "block";
+				musicBars.classList.remove("paused");
+			} else {
+				playIcon.style.display = "block";
+				pauseIcon.style.display = "none";
+				musicBars.classList.add("paused");
+			}
+		}
+
+		playBtn.addEventListener("click", togglePlayPause);
+		prevBtn.addEventListener("click", () => { audio.currentTime = 0; });
+		nextBtn.addEventListener("click", () => { audio.currentTime = 0; });
+
+		audio.addEventListener("play", updatePlayState);
+		audio.addEventListener("pause", updatePlayState);
+
+		audio.addEventListener("loadedmetadata", () => {
+			totalTimeEl.textContent = formatTime(audio.duration);
+		});
+
+		audio.addEventListener("timeupdate", () => {
+			if (audio.duration) {
+				const percent = (audio.currentTime / audio.duration) * 100;
+				progressFill.style.width = percent + "%";
+				currentTimeEl.textContent = formatTime(audio.currentTime);
+			}
+		});
+
+		audio.addEventListener("ended", () => {
+			audio.currentTime = 0;
+			audio.play().catch(() => {});
+		});
+
+		progressBar.addEventListener("click", (e) => {
+			if (!audio.duration) return;
+			const rect = progressBar.getBoundingClientRect();
+			const percent = (e.clientX - rect.left) / rect.width;
+			audio.currentTime = percent * audio.duration;
+		});
+
+		volumeSlider.addEventListener("input", () => {
+			audio.volume = volumeSlider.value / 100;
+		});
+
+		audio.addEventListener("play", () => {
+			musicBars.classList.remove("paused");
+		});
+
+		setTimeout(() => {
+			try {
+				audio.play().catch(() => {
+					musicBars.classList.add("paused");
+				});
+			} catch (e) {
+				musicBars.classList.add("paused");
+			}
+		}, 800);
+	});
+</script>
