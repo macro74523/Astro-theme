@@ -156,38 +156,6 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 		}
 	</section>
 
-	{
-		latestNotes.length > 0 && (
-			<section class="notes-section">
-				<div class="section-header">
-					<h2 class="section-title">
-						<svg
-							class="icon"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-						>
-							<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-							<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-						</svg>
-						笔记
-					</h2>
-					<a href="/notes/" class="more-link">
-						查看全部 →
-					</a>
-				</div>
-				<ul class="notes-list" role="list">
-					{latestNotes.map((note) => (
-						<li>
-							<Note note={note} as="h3" isPreview />
-						</li>
-					))}
-				</ul>
-			</section>
-		)
-	}
-
 	<style>
 		.section-header {
 			display: flex;
@@ -441,7 +409,7 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			padding-top: 1.25rem;
 			border-top: none;
 			gap: 2.5rem;
-			margin-left: 150px;
+			margin-left: 110px;
 		}
 
 		.stat-column {
