@@ -9,66 +9,29 @@
 		-webkit-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
-		min-height: 100vh;
-		height: 100%;
-		overscroll-behavior-y: none;
-		overscroll-behavior-x: none;
-		-webkit-overflow-scrolling: touch;
-		touch-action: pan-y pinch-zoom;
+	}
+
+	html::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	html::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	html::-webkit-scrollbar-thumb {
+		background: rgba(0, 0, 0, 0.2);
+		border-radius: 3px;
+	}
+
+	.dark html::-webkit-scrollbar-thumb,
+	[data-theme="dark"] html::-webkit-scrollbar-thumb {
+		background: rgba(255, 255, 255, 0.2);
 	}
 
 	body {
-		min-height: 100vh;
-		height: 100%;
 		margin: 0;
 		padding: 0;
-		overscroll-behavior-y: none;
-		overscroll-behavior-x: none;
-	}
-
-	#main {
-		overflow-y: auto;
-		overflow-x: hidden;
-		overscroll-behavior-y: contain;
-	}
-
-	@media (min-width: 768px) {
-		html {
-			font-size: 16px;
-		}
-	}
-
-	@media (min-width: 1024px) {
-		html {
-			font-size: 17px;
-		}
-	}
-
-	@media (min-width: 1280px) {
-		html {
-			font-size: 18px;
-		}
-	}
-
-	:root,
-	:root[data-theme="light"] {
-		color-scheme: light;
-		--theme-bg: 50deg 60% 96%;
-		--theme-link: 172deg 18% 41%;
-		--theme-text: 203deg 11% 15%;
-		--theme-accent: 159deg 64% 45%;
-		--theme-accent-2: 0deg 0% 7%;
-		--theme-quote: 159deg 64% 45%;
-	}
-
-	:root[data-theme="dark"] {
-		color-scheme: dark;
-		--theme-bg: 210deg 6% 12%;
-		--theme-link: 159deg 64% 65%;
-		--theme-text: 220deg 3% 79%;
-		--theme-accent: 159deg 64% 45%;
-		--theme-accent-2: 0deg 0% 93%;
-		--theme-quote: 159deg 64% 65%;
 	}
 }
 
@@ -235,4 +198,43 @@ iframe[src*="bilibili.com"] {
 		border-radius: 0.25rem;
 		margin: 1rem 0;
 	}
+}
+
+@media (min-width: 768px) {
+	html {
+		font-size: 16px;
+	}
+}
+
+@media (min-width: 1024px) {
+	html {
+		font-size: 17px;
+	}
+}
+
+@media (min-width: 1280px) {
+	html {
+		font-size: 18px;
+	}
+}
+
+:root,
+:root[data-theme="light"] {
+	color-scheme: light;
+	--theme-bg: 50deg 60% 96%;
+	--theme-link: 172deg 18% 41%;
+	--theme-text: 203deg 11% 15%;
+	--theme-accent: 159deg 64% 45%;
+	--theme-accent-2: 0deg 0% 7%;
+	--theme-quote: 159deg 64% 45%;
+}
+
+:root[data-theme="dark"] {
+	color-scheme: dark;
+	--theme-bg: 210deg 6% 12%;
+	--theme-link: 159deg 64% 65%;
+	--theme-text: 220deg 3% 79%;
+	--theme-accent: 159deg 64% 45%;
+	--theme-accent-2: 0deg 0% 93%;
+	--theme-quote: 159deg 64% 65%;
 }
