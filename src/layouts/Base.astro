@@ -18,15 +18,22 @@ const {
 } = Astro.props;
 ---
 
-<html class="scroll-smooth" lang={siteConfig.lang}>
+<html class="h-full scroll-smooth" lang={siteConfig.lang}>
 	<head>
 		<BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css" />
 		<script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
 		></script>
+		<style is:global>
+			body {
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+			}
+		</style>
 	</head>
 	<body
-		class="mx-auto max-w-[120rem] bg-bgColor px-1 pt-4 font-mono text-sm font-normal text-textColor antialiased sm:px-3 lg:px-6"
+		class="mx-auto flex max-w-[120rem] flex-col bg-bgColor px-1 pt-4 font-mono text-sm font-normal text-textColor antialiased sm:px-3 lg:px-6"
 	>
 		<Loading />
 		<ThemeProvider />
@@ -40,7 +47,7 @@ const {
 				<ThemeToggle />
 			</div>
 		</header>
-		<main id="main">
+		<main id="main" class="flex-1">
 			<slot />
 		</main>
 		<Footer />

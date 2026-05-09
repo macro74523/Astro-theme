@@ -9,6 +9,8 @@ type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 };
 
 const { as: Tag = "div", post, withDesc = false } = Astro.props;
+const displayTitle =
+	post.data.title.length > 15 ? post.data.title.slice(0, 14) + "…" : post.data.title;
 ---
 
 <!-- 修改：主页字体 -->
@@ -23,7 +25,7 @@ const { as: Tag = "div", post, withDesc = false } = Astro.props;
 		data-astro-prefetch
 		href={`/posts/${post.id}/`}
 	>
-		{post.data.title}
+		{displayTitle}
 	</a>
 </Tag>
 {withDesc && <q class="line-clamp-3 italic">{post.data.description}</q>}
