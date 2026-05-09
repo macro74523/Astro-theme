@@ -38,6 +38,7 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 	<section class="intro-section">
 		<div class="intro-card">
 			<div class="intro-card-top">
+				<div class="intro-card-bg"></div>
 				<div class="intro-avatar">
 					<div class="avatar-circle">
 						<img
@@ -61,7 +62,7 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 				</div>
 				<div class="stats-container">
 					<div class="stat-column">
-						<span class="stat-num">{allPostsByDate.length}</span>
+						<span class="stat-num">{filteredPosts.length}</span>
 						<span class="stat-txt">作品</span>
 					</div>
 					<div class="stat-column">
@@ -319,16 +320,25 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 		.intro-card-top {
 			width: 100%;
 			height: 170px;
-			background-image: url("https://img.cdn1.vip/i/69fe834dc0638_1778287437.webp");
-			background-size: cover;
-			background-position: center center;
-			background-repeat: no-repeat;
-			border-radius: 1rem;
 			position: relative;
 			overflow: visible;
 		}
 
-		.intro-card-top::before {
+		.intro-card-bg {
+			width: 100%;
+			height: 100%;
+			background-image: url("https://img.cdn1.vip/i/69fe834dc0638_1778287437.webp");
+			background-size: cover;
+			background-position: center 30%;
+			background-repeat: no-repeat;
+			border-radius: 1rem;
+			position: absolute;
+			top: 0;
+			left: 0;
+			overflow: hidden;
+		}
+
+		.intro-card-bg::before {
 			content: "";
 			position: absolute;
 			top: 0;
@@ -344,19 +354,17 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			position: absolute;
 			bottom: -45px;
 			left: 15px;
-			z-index: 10;
+			z-index: 100;
 		}
 
 		.avatar-circle {
 			width: 90px;
 			height: 90px;
-			border-radius: 50%;
-			border: 4px solid hsl(var(--theme-bg));
-			background: linear-gradient(135deg, hsl(var(--theme-accent)) 0%, hsl(159, 70%, 35%) 100%);
+			border-radius: 1.25rem;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+			overflow: hidden;
 		}
 
 		.avatar-icon {
@@ -370,7 +378,6 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
-			border-radius: 50%;
 		}
 
 		.intro-bottom-row {
@@ -387,29 +394,30 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 		.intro-content {
 			text-align: left;
 			margin-bottom: 0.75rem;
+			margin-top: -0.5rem;
 		}
 
 		.intro-name {
-			font-size: 1.25rem;
-			font-weight: 700;
+			font-size: 1.375rem;
+			font-weight: 800;
 			color: hsl(var(--theme-text));
-			margin: 0 0 0.3rem 0;
+			margin: 0 0 0.2rem 0;
 			letter-spacing: 0.05em;
 		}
 
 		.intro-title {
-			font-size: 0.85rem;
+			font-size: 0.95rem;
 			color: hsl(var(--theme-text), 0.7);
-			margin: 0 0 0.4rem 0;
-			font-weight: 500;
+			margin: 0 0 0.3rem 0;
+			font-weight: 600;
 		}
 
 		.intro-description {
-			font-size: 0.825rem;
-			color: hsl(var(--theme-text), 0.6);
-			line-height: 1.5;
+			font-size: 0.9rem;
+			color: hsl(var(--theme-text), 0.7);
+			line-height: 1.6;
 			margin: 0;
-			font-weight: 400;
+			font-weight: 500;
 		}
 
 		.stats-container {
@@ -417,9 +425,9 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			align-items: center;
 			justify-content: flex-start;
 			width: auto;
-			padding-top: 0.75rem;
+			padding-top: 1rem;
 			border-top: none;
-			gap: 2rem;
+			gap: 2.25rem;
 			margin-left: 115px;
 		}
 
@@ -427,28 +435,29 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			display: flex;
 			flex-direction: column;
 			align-items: flex-start;
-			gap: 0.1rem;
+			gap: 0.15rem;
 			padding: 0;
 			background: transparent;
 			border-radius: 0;
 		}
 
 		.stat-num {
-			font-size: 1.25rem;
-			font-weight: 700;
+			font-size: 1.4rem;
+			font-weight: 800;
 			color: hsl(var(--theme-text));
 			line-height: 1;
 		}
 
 		.stat-txt {
-			font-size: 0.75rem;
-			font-weight: 500;
-			color: hsl(var(--theme-text), 0.55);
+			font-size: 0.8rem;
+			font-weight: 600;
+			color: hsl(var(--theme-text), 0.65);
 		}
 
 		@media (min-width: 768px) {
 			.intro-card-top {
 				height: 240px;
+				background-position: center 30%;
 			}
 
 			.intro-avatar {
@@ -459,7 +468,8 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 			.avatar-circle {
 				width: 130px;
 				height: 130px;
-				border-width: 6px;
+				border-radius: 1.75rem;
+				overflow: hidden;
 			}
 
 			.avatar-icon {
@@ -468,7 +478,7 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 
 			.intro-bottom-row {
 				padding-left: 180px;
-				padding-top: 30px;
+				padding-top: 15px;
 				display: flex;
 				flex-direction: row;
 				align-items: flex-start;
@@ -603,6 +613,153 @@ const totalPages = Math.ceil(filteredPosts.length / MAX_POSTS);
 					filterPostsByTag(selectedTag);
 				});
 			});
+
+			const introBg = document.querySelector(".intro-card-bg");
+			if (introBg) {
+				let mouseX = 0,
+					mouseY = 0;
+				let prevMouseX = 0,
+					prevMouseY = 0;
+				let trails = [];
+				const maxTrails = 8;
+
+				const mainGlow = document.createElement("div");
+				mainGlow.style.cssText = `
+					position: absolute;
+					width: 120px;
+					height: 120px;
+					border-radius: 50%;
+					background: radial-gradient(circle, rgba(139, 179, 178, 0.35) 0%, transparent 70%);
+					pointer-events: none;
+					transform: translate(-50%, -50%);
+					z-index: 10;
+					filter: blur(12px);
+					opacity: 0;
+					transition: opacity 0.3s ease;
+				`;
+				introBg.appendChild(mainGlow);
+
+				for (let i = 0; i < maxTrails; i++) {
+					const trail = document.createElement("div");
+					trail.style.cssText = `
+						position: absolute;
+						width: 80px;
+						height: 80px;
+						border-radius: 50%;
+						background: radial-gradient(circle, rgba(139, 179, 178, 0.18) 0%, transparent 70%);
+						pointer-events: none;
+						transform: translate(-50%, -50%);
+						z-index: 9;
+						filter: blur(10px);
+						opacity: 0;
+					`;
+					introBg.appendChild(trail);
+					trails.push({ el: trail, x: 0, y: 0, opacity: 0 });
+				}
+
+				introBg.addEventListener("mousemove", (e) => {
+					const rect = introBg.getBoundingClientRect();
+					mouseX = e.clientX - rect.left;
+					mouseY = e.clientY - rect.top;
+					mainGlow.style.left = mouseX + "px";
+					mainGlow.style.top = mouseY + "px";
+					mainGlow.style.opacity = "1";
+				});
+
+				introBg.addEventListener("mouseleave", () => {
+					mainGlow.style.opacity = "0";
+					trails.forEach((t) => (t.opacity = 0));
+				});
+
+				const starCount = 22;
+				const stars = [];
+				for (let i = 0; i < starCount; i++) {
+					const star = document.createElement("div");
+					const size = Math.random() * 2.5 + 0.8;
+					const sx = Math.random() * 100;
+					const sy = Math.random() * 100;
+					const twinkleSpeed = Math.random() * 0.025 + 0.008;
+					const phase = Math.random() * Math.PI * 2;
+					const floatPhaseX = Math.random() * Math.PI * 2;
+					const floatPhaseY = Math.random() * Math.PI * 2;
+					const floatSpeedX = Math.random() * 0.008 + 0.002;
+					const floatSpeedY = Math.random() * 0.006 + 0.001;
+					const floatRangeX = Math.random() * 3 + 1;
+					const floatRangeY = Math.random() * 2 + 0.8;
+
+					star.style.cssText = `
+						position: absolute;
+						width: ${size}px;
+						height: ${size}px;
+						border-radius: 50%;
+						background: rgba(255, 255, 255, 0.7);
+						pointer-events: none;
+						left: ${sx}%;
+						top: ${sy}%;
+						z-index: 5;
+						box-shadow: 0 0 ${size * 2.5}px rgba(255, 255, 255, 0.5);
+					`;
+					introBg.appendChild(star);
+					stars.push({
+						el: star,
+						baseX: sx,
+						baseY: sy,
+						floatPhaseX,
+						floatPhaseY,
+						floatSpeedX,
+						floatSpeedY,
+						floatRangeX,
+						floatRangeY,
+						twinklePhase: phase,
+						twinkleSpeed,
+					});
+				}
+
+				let frameSkip = 0;
+				function animate() {
+					frameSkip++;
+					const dx = mouseX - prevMouseX;
+					const dy = mouseY - prevMouseY;
+					const speed = Math.sqrt(dx * dx + dy * dy);
+
+					trails.forEach((trail, i) => {
+						const targetX = mouseX;
+						const targetY = mouseY;
+						trail.x += (targetX - trail.x) * 0.15;
+						trail.y += (targetY - trail.y) * 0.15;
+						trail.opacity = Math.max(0, trail.opacity - 0.08);
+
+						if (speed > 3 && i === 0) {
+							trail.opacity = Math.min(0.3, 0.25 + speed * 0.015);
+						}
+
+						trail.el.style.left = trail.x + "px";
+						trail.el.style.top = trail.y + "px";
+						trail.el.style.opacity = trail.opacity;
+					});
+
+					if (frameSkip % 2 === 0) {
+						stars.forEach((star) => {
+							star.twinklePhase += star.twinkleSpeed;
+							star.floatPhaseX += star.floatSpeedX;
+							star.floatPhaseY += star.floatSpeedY;
+
+							const twinkleOpacity = 0.25 + Math.abs(Math.sin(star.twinklePhase)) * 0.75;
+							const floatX = star.baseX + Math.sin(star.floatPhaseX) * star.floatRangeX;
+							const floatY = star.baseY + Math.sin(star.floatPhaseY) * star.floatRangeY;
+
+							star.el.style.left = floatX + "%";
+							star.el.style.top = floatY + "%";
+							star.el.style.opacity = twinkleOpacity;
+						});
+					}
+
+					prevMouseX = mouseX;
+					prevMouseY = mouseY;
+					requestAnimationFrame(animate);
+				}
+				animate();
+			}
 		});
 	</script>
 </PageLayout>
