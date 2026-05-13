@@ -2,15 +2,28 @@
 ---
 
 <div class="music-player-container" id="musicPlayer">
-	<button class="music-toggle-btn" id="musicToggle">
+	<button class="music-toggle-btn" id="musicToggle" aria-label="音乐播放器">
 		<div class="music-icon-wrapper">
-			<div class="music-bars paused">
+			<!-- 旋转唱片图标 -->
+			<div class="vinyl-disc paused" id="vinylDisc">
+				<div class="vinyl-inner">
+					<div class="vinyl-label">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+							<polygon points="5 3 19 12 5 21 5 3"></polygon>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<!-- 音乐波形 -->
+			<div class="music-bars paused" id="musicBars">
 				<span class="bar"></span>
 				<span class="bar"></span>
 				<span class="bar"></span>
 				<span class="bar"></span>
 			</div>
 		</div>
+		<!-- 悬浮提示 -->
+		<span class="tooltip" id="musicTooltip">点击播放音乐</span>
 	</button>
 
 	<div class="music-panel" id="musicPanel">
@@ -75,65 +88,180 @@
 	}
 
 	.music-toggle-btn {
-		width: 52px;
-		height: 52px;
+		width: 56px;
+		height: 56px;
 		border-radius: 50%;
-		background: hsl(var(--theme-accent) / 0.9);
-		border: none;
+		background: linear-gradient(135deg, hsl(var(--theme-accent) / 0.95) 0%, hsl(var(--theme-accent) / 0.8) 100%);
+		border: 2px solid hsl(var(--theme-accent) / 0.3);
 		cursor: pointer;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		box-shadow: 0 4px 20px hsl(var(--theme-accent) / 0.35);
-		transition: all 0.3s ease;
+		box-shadow: 
+			0 4px 20px hsl(var(--theme-accent) / 0.35),
+			0 0 0 1px hsl(var(--theme-bg) / 0.1) inset;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		position: relative;
+		overflow: visible;
 	}
 
 	.music-toggle-btn:hover {
-		transform: scale(1.08);
-		box-shadow: 0 6px 28px hsl(var(--theme-accent) / 0.45);
+		transform: scale(1.1) rotate(5deg);
+		box-shadow: 
+			0 8px 32px hsl(var(--theme-accent) / 0.5),
+			0 0 0 1px hsl(var(--theme-bg) / 0.15) inset;
+		border-color: hsl(var(--theme-accent) / 0.5);
+	}
+
+	.music-toggle-btn:active {
+		transform: scale(0.95);
+	}
+
+	/* 悬浮提示 */
+	.tooltip {
+		position: absolute;
+		bottom: 100%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-8px);
+		background: hsl(var(--theme-bg) / 0.95);
+		color: hsl(var(--theme-text));
+		padding: 6px 12px;
+		border-radius: 8px;
+		font-size: 0.75rem;
+		font-weight: 500;
+		white-space: nowrap;
+		opacity: 0;
+		visibility: hidden;
+		transition: all 0.2s ease;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		border: 1px solid hsl(var(--theme-accent) / 0.15);
+		backdrop-filter: blur(8px);
+	}
+
+	.tooltip::after {
+		content: '';
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		border: 5px solid transparent;
+		border-top-color: hsl(var(--theme-bg) / 0.95);
+	}
+
+	.music-toggle-btn:hover .tooltip {
+		opacity: 1;
+		visibility: visible;
+		transform: translateX(-50%) translateY(-12px);
 	}
 
 	.music-icon-wrapper {
-		width: 24px;
-		height: 24px;
+		width: 28px;
+		height: 28px;
 		display: flex;
-		align-items: flex-end;
+		align-items: center;
 		justify-content: center;
-		gap: 2px;
+		position: relative;
 	}
 
+	/* 旋转唱片 */
+	.vinyl-disc {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		background: 
+			radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 50%),
+			conic-gradient(from 0deg, #1a1a2e 0deg, #16213e 60deg, #1a1a2e 120deg, #0f0f23 180deg, #1a1a2e 240deg, #16213e 300deg, #1a1a2e 360deg);
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		animation: spin 3s linear infinite;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+		transition: opacity 0.3s ease;
+	}
+
+	.vinyl-disc.paused {
+		animation-play-state: paused;
+		opacity: 0.7;
+	}
+
+	.vinyl-inner {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: hsl(var(--theme-accent));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+	}
+
+	.vinyl-inner::before {
+		content: '';
+		position: absolute;
+		width: 3px;
+		height: 3px;
+		border-radius: 50%;
+		background: #1a1a2e;
+	}
+
+	.vinyl-label {
+		width: 6px;
+		height: 6px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.vinyl-label svg {
+		width: 4px;
+		height: 4px;
+		color: white;
+	}
+
+	/* 音乐波形 */
 	.music-bars {
+		position: absolute;
 		display: flex;
 		gap: 2px;
 		align-items: flex-end;
-		height: 18px;
+		height: 20px;
+		opacity: 0;
+		transform: scale(0.8);
+		transition: all 0.3s ease;
+	}
+
+	.music-bars.show {
+		opacity: 1;
+		transform: scale(1);
 	}
 
 	.music-bars .bar {
 		width: 3px;
-		background: white;
+		background: linear-gradient(to top, white, hsl(var(--theme-accent) / 0.8));
 		border-radius: 2px;
-		animation: equalizer 0.8s ease-in-out infinite alternate;
+		animation: equalizer 0.6s ease-in-out infinite alternate;
+		box-shadow: 0 0 4px hsl(var(--theme-accent) / 0.5);
 	}
 
 	.music-bars .bar:nth-child(1) {
-		height: 6px;
+		height: 8px;
 		animation-delay: 0s;
 	}
 
 	.music-bars .bar:nth-child(2) {
-		height: 12px;
-		animation-delay: 0.15s;
+		height: 14px;
+		animation-delay: 0.1s;
 	}
 
 	.music-bars .bar:nth-child(3) {
-		height: 8px;
-		animation-delay: 0.3s;
+		height: 10px;
+		animation-delay: 0.2s;
 	}
 
 	.music-bars .bar:nth-child(4) {
-		height: 14px;
-		animation-delay: 0.45s;
+		height: 16px;
+		animation-delay: 0.3s;
 	}
 
 	.music-bars.paused .bar {
@@ -143,9 +271,20 @@
 	@keyframes equalizer {
 		0% {
 			height: 4px;
+			opacity: 0.6;
 		}
 		100% {
-			height: 16px;
+			height: 18px;
+			opacity: 1;
+		}
+	}
+
+	@keyframes spin {
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
 		}
 	}
 
@@ -334,11 +473,14 @@
 		const currentTimeEl = document.getElementById("currentTime");
 		const totalTimeEl = document.getElementById("totalTime");
 		const volumeSlider = document.getElementById("volumeSlider");
-		const musicBars = document.querySelector(".music-bars");
+		const musicBars = document.getElementById("musicBars");
+		const vinylDisc = document.getElementById("vinylDisc");
+		const musicTooltip = document.getElementById("musicTooltip");
 		const playIcon = document.querySelector(".play-icon");
 		const pauseIcon = document.querySelector(".pause-icon");
 
 		let isPanelOpen = false;
+		let isPlaying = false;
 
 		audio.volume = 0.7;
 
@@ -369,15 +511,21 @@
 		}
 
 		function updatePlayState() {
-			const isPlaying = !audio.paused;
+			isPlaying = !audio.paused;
 			if (isPlaying) {
 				playIcon.style.display = "none";
 				pauseIcon.style.display = "block";
 				musicBars.classList.remove("paused");
+				musicBars.classList.add("show");
+				vinylDisc.classList.remove("paused");
+				musicTooltip.textContent = "点击暂停音乐";
 			} else {
 				playIcon.style.display = "block";
 				pauseIcon.style.display = "none";
 				musicBars.classList.add("paused");
+				musicBars.classList.remove("show");
+				vinylDisc.classList.add("paused");
+				musicTooltip.textContent = "点击播放音乐";
 			}
 		}
 
@@ -418,15 +566,24 @@
 
 		audio.addEventListener("play", () => {
 			musicBars.classList.remove("paused");
+			musicBars.classList.add("show");
+			vinylDisc.classList.remove("paused");
 		});
+
+		// 初始状态：显示唱片，隐藏波形
+		musicBars.classList.remove("show");
 
 		setTimeout(() => {
 			try {
 				audio.play().catch(() => {
 					musicBars.classList.add("paused");
+					musicBars.classList.remove("show");
+					vinylDisc.classList.add("paused");
 				});
 			} catch (e) {
 				musicBars.classList.add("paused");
+				musicBars.classList.remove("show");
+				vinylDisc.classList.add("paused");
 			}
 		}, 800);
 	});
